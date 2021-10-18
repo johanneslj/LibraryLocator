@@ -1,10 +1,37 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
+import 'login_view.dart';
 import 'main.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+
+  IconButton signInAndOutButton(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser != null) {
+      return IconButton(
+          icon: Icon(Icons.logout),
+          onPressed: () async {
+            await FirebaseAuth.instance.signOut();
+            setState(() => null);
+          });
+    } else {
+      return IconButton(
+          icon: Icon(Icons.login),
+          onPressed: () async {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => LoginPage()));
+          });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +40,13 @@ class Home extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('First Route'),
+          leading: signInAndOutButton(context),
         ),
         body: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: entries.length,
             itemBuilder: (BuildContext context, int index) {
-              while(colorCodes.length < entries.length){
+              while (colorCodes.length < entries.length) {
                 colorCodes.add(colorCodes[0]);
               }
               return Container(
@@ -32,7 +60,6 @@ class Home extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) => MyHomePage(title: 'cool')),
                     );
-// Navigate to second route when tapped.
                   },
                 ),
               );
