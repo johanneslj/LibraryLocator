@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'home.dart';
 
@@ -50,6 +51,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  String _barcode = "";
 
   void _incrementCounter() {
     setState(() {
@@ -59,8 +61,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       _counter++;
-      openMap(1,1);
-
     });
   }
 
@@ -68,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
     String googleUrl = 'https://www.google.com/maps/dir/?api=1&origin=Your+location&destination=NTNU+Biblioteket+i+%C3%85lesund,+Larsg%C3%A5rdsvegen+bygget+2&travelmode=walking';
 
       await launch(googleUrl);
+  }
+
+  Future<void> barcodeScanner() async {
+      _barcode = await FlutterBarcodeScanner.scanBarcode("#101010", "Cancel", false, ScanMode.BARCODE);
   }
 
   @override
@@ -108,7 +112,7 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             Text(
-              '$_counter',
+              '$_barcode',
               style: Theme.of(context).textTheme.headline4,
             ),
           ],
@@ -116,11 +120,10 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-          );
-        },
+          barcodeScanner().whenComplete(() => setState(() {
+            print(_barcode);
+          }));
+          },
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
