@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "460599008472",
+    "firebase_url": "https://librarylocator-da714-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "librarylocator-da714",
+    "storage_bucket": "librarylocator-da714.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460599008472:android:f4c1ffafc33eb90e444bad",
+        "android_client_info": {
+          "package_name": "com.ntnu.iir.mobapp.library_locator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460599008472-u7b5fqqmuciujkgjrigvdhqf2ufaqgaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCO6XKvZ9e5kMOkBtq1m30SY3SKEBlQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460599008472-u7b5fqqmuciujkgjrigvdhqf2ufaqgaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:460599008472:android:68c8463c3a8b8946444bad",
+        "android_client_info": {
+          "package_name": "no.ntnu.LibraryLocator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "460599008472-u7b5fqqmuciujkgjrigvdhqf2ufaqgaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChCO6XKvZ9e5kMOkBtq1m30SY3SKEBlQg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "460599008472-u7b5fqqmuciujkgjrigvdhqf2ufaqgaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
