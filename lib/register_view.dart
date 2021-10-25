@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
 import 'login_view.dart';
 
@@ -13,7 +14,7 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final RegExp usernameRegex = new RegExp(r"^[A-Za-z\d]{4,20}$");
+  final RegExp usernameRegex = new RegExp(r"^[A-Za-z\d@.]{4,25}$");
   final RegExp passwordRegex =
       new RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d@#$!%*?&_]{8,}$");
 
@@ -132,13 +133,30 @@ class _RegisterPageState extends State<RegisterPage> {
                                       horizontal: 20, vertical: 10),
                                   fixedSize: const Size(330, 20),
                                 ),
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
+                                    try {
+                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(email:usernameController.text,password:passwordController.text);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) => HomePage()),
                                     );
+                                    } on FirebaseAuthException catch(e) {
+                                      print(e);
+                                      String msg = "";
+                                      if (e.code == 'email-already-in-use') {
+                                        msg = "User already exists";
+                                      }
+                                        Fluttertoast.showToast(
+                                        msg: msg,
+                                        toastLength: Toast.LENGTH_LONG,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: Colors.pinkAccent,
+                                        textColor: Colors.white,
+                                        fontSize: 16.0);
+
+                                    }
                                   }
                                 },
                                 child: const Text('Continue'))

@@ -26,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomePage()));
     }
-
     return Scaffold(
         appBar: AppBar(
           title: Text("Log In"),
@@ -59,6 +58,9 @@ class _LoginPageState extends State<LoginPage> {
                           Text("Email",
                               style: TextStyle(color: Colors.pinkAccent)),
                           TextFormField(
+                            validator: (val) => val!.isEmpty || !val.contains("@")
+                                ? "Enter a valid email"
+                                : null,
                             // Username text field
                             controller: emailController,
                             decoration: InputDecoration(
@@ -124,28 +126,28 @@ class _LoginPageState extends State<LoginPage> {
                                                                   .text);
 
                                               print(userCredential.toString());
-
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
                                                           HomePage()));
                                             } on FirebaseAuthException catch (e) {
+                                             print(e.toString());
+                                             String msg = "";
                                               if (e.code == 'user-not-found') {
-                                                Fluttertoast.showToast(
-                                                    msg: 'User not found.');
+                                                msg = "User not found";
                                               } else if (e.code ==
                                                   'wrong-password') {
-                                                Fluttertoast.showToast(
-                                                    msg: 'Wrong password.');
+                                                msg = 'Wrong password';
                                               }
+                                             Fluttertoast.showToast(
+                                                 msg: msg,
+                                                 toastLength: Toast.LENGTH_LONG,
+                                                 gravity: ToastGravity.BOTTOM,
+                                                 backgroundColor: Colors.pinkAccent,
+                                                 textColor: Colors.white,
+                                                 fontSize: 16.0);
                                             }
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomePage()),
-                                            );
                                           }
                                         },
                                         child: const Text('Sign In')),
