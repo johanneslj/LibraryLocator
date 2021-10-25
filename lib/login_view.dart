@@ -12,7 +12,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String email = "";
@@ -23,13 +22,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-
     if (FirebaseAuth.instance.currentUser != null) {
       Navigator.push(
-          context,
-          MaterialPageRoute(
-          builder: (context) =>
-          HomePage()));
+          context, MaterialPageRoute(builder: (context) => HomePage()));
     }
 
     return Scaffold(
@@ -46,12 +41,10 @@ class _LoginPageState extends State<LoginPage> {
                     children: <Widget>[
                       Row(
                         children: <Widget>[
-                          Text(
-                              "Sign In",
+                          Text("Sign In",
                               style: TextStyle(
                                 fontSize: 24,
-                              )
-                          ),
+                              )),
                         ],
                       ),
                       Row(
@@ -63,25 +56,20 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                              "Email",
-                              style: TextStyle(
-                                color: Colors.pinkAccent
-                              )
-                          ),
+                          Text("Email",
+                              style: TextStyle(color: Colors.pinkAccent)),
                           TextFormField(
                             // Username text field
                             controller: emailController,
                             decoration: InputDecoration(
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color:Colors.pinkAccent
-                                  ),
+                                  borderSide:
+                                      BorderSide(color: Colors.pinkAccent),
                                 ),
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
                                 ),
-                                hintText: 'Email'
-                            ),
+                                hintText: 'Email'),
                           ),
                         ],
                       ),
@@ -89,102 +77,109 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                              "Password",
-                              style: TextStyle(
-                                  color: Colors.pinkAccent
-                              )
-                          ),
-                          TextFormField( // Password text field
+                          Text("Password",
+                              style: TextStyle(color: Colors.pinkAccent)),
+                          TextFormField(
+                            // Password text field
                             controller: passwordController,
                             decoration: InputDecoration(
                               focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color:Colors.pinkAccent
-                                ),
+                                borderSide:
+                                    BorderSide(color: Colors.pinkAccent),
                               ),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               hintText: 'Password...',
-                            ), obscureText: true,
+                            ),
+                            obscureText: true,
                           ),
                         ],
                       ),
                       Padding(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Container(
-                            child: Column(
-                                children: <Widget>[
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: Colors.pinkAccent,
-                                              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                              fixedSize: const Size(330,20),
-                                            ),
-                                            onPressed: () async {
-                                              if (_formKey.currentState!.validate()) {
-                                                try {
-                                                  UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                                                      email: emailController.text, password: passwordController.text);
+                            child: Column(children: <Widget>[
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          primary: Colors.pinkAccent,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 10),
+                                          fixedSize: const Size(330, 20),
+                                        ),
+                                        onPressed: () async {
+                                          if (_formKey.currentState!
+                                              .validate()) {
+                                            try {
+                                              UserCredential userCredential =
+                                                  await FirebaseAuth.instance
+                                                      .signInWithEmailAndPassword(
+                                                          email: emailController
+                                                              .text,
+                                                          password:
+                                                              passwordController
+                                                                  .text);
 
-                                                  print(userCredential.toString());
+                                              print(userCredential.toString());
 
-                                                  Navigator.push(context, MaterialPageRoute(
-                                                      builder: (context) => HomePage()));
-
-                                                } on FirebaseAuthException catch (e) {
-                                                  if (e.code == 'user-not-found') {
-                                                    Fluttertoast.showToast(msg: 'User not found.');
-
-                                                  } else if (e.code == 'wrong-password') {
-                                                    Fluttertoast.showToast(msg: 'Wrong password.');
-                                                  }
-                                                }
-                                                Navigator.push(
+                                              Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          HomePage()),
-                                                );
+                                                          HomePage()));
+                                            } on FirebaseAuthException catch (e) {
+                                              if (e.code == 'user-not-found') {
+                                                Fluttertoast.showToast(
+                                                    msg: 'User not found.');
+                                              } else if (e.code ==
+                                                  'wrong-password') {
+                                                Fluttertoast.showToast(
+                                                    msg: 'Wrong password.');
                                               }
-                                            },
-                                            child: const Text('Sign In')
-                                        ),
-                                      ]
-                                  ),
-                                  Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.push(context, MaterialPageRoute(
-                                                  builder: (context) => (RegisterPage())),
-                                              );
-                                            },
-                                            child: const Text('Forgotten Password')
-                                        ),
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.push(context, MaterialPageRoute(
-                                                  builder: (context) => (RegisterPage())),
-                                              );
-                                            },
-                                            child: const Text('Register')
-                                        ),
-                                      ]
-                                  ),
-                                ]
-                            ),
-                          )
-                      )
-                    ]
-                )
-            ),
+                                            }
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      HomePage()),
+                                            );
+                                          }
+                                        },
+                                        child: const Text('Sign In')),
+                                  ]),
+                              Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    (RegisterPage())),
+                                          );
+                                        },
+                                        child:
+                                            const Text('Forgot Password?')),
+                                    TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    (RegisterPage())),
+                                          );
+                                        },
+                                        child: const Text('Sign up')),
+                                  ]),
+                            ]),
+                          ))
+                    ])),
           ),
-        )
-    );
+        ));
   }
 }
