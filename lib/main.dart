@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+import 'book_details_view.dart';
 import 'home.dart';
 
 void main() {
@@ -123,6 +124,11 @@ class _MyHomePageState extends State<MyHomePage> {
           barcodeScanner().whenComplete(() => setState(() {
             print(_barcode);
           }));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BookDetailsView()),
+          );
           },
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
