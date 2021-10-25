@@ -121,9 +121,12 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          /*
           barcodeScanner().whenComplete(() => setState(() {
             print(_barcode);
           }));
+
+           */
           Navigator.push(
             context,
             MaterialPageRoute(
