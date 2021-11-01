@@ -27,19 +27,14 @@ class _ReviewCardState extends State<ReviewCard> {
         child: Column(
           children: [
             Text(widget.username, textAlign: TextAlign.left),
-            RatingBar.builder(
-              initialRating: widget.stars,
-              minRating: 0,
-              ignoreGestures: true,
-              direction: Axis.horizontal,
-              itemSize: 10,
-              itemCount: 5,
-              itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
-              itemBuilder: (context, _) => Icon(
+            RatingBarIndicator(
+              rating: widget.stars,
+              itemBuilder: (context, index) => Icon(
                 Icons.star,
-                color: Colors.black,
+                color: Colors.amber,
               ),
-              onRatingUpdate: (rating) {},
+              itemCount: 5,
+              itemSize: 10,
             ),
           ],
           crossAxisAlignment: CrossAxisAlignment.start,

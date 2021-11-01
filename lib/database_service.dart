@@ -27,6 +27,19 @@ class DatabaseService {
     return reviewList;
   }
 
+ Future<Map<String, String>> getAvailability(String isbn) async {
+   final reviews = firebaseDatabase.child("books/"+ isbn +"/availability/");
+   Map<String, String> availability = new Map<String, String>();
+   Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+   await reviews.get().then((DataSnapshot snapshot) {
+     data = new Map<dynamic, dynamic>.from(snapshot.value);
+     data.forEach((key, value) {
+       String numberAvailable = value.toString();
+       availability.putIfAbsent(key, () => numberAvailable);
+     });
+     });
+   return availability;
+ }
 
  Future<double> getAverageRating(String isbn) async {
     double averageRating = 0;
@@ -46,4 +59,9 @@ class DatabaseService {
 
     return averageRating;
  }
+
+ void loanBook(String isbn, String library) {
+
+ }
+
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:library_locator/book_details_view.dart';
 import 'package:library_locator/profile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
           icon: Icon(Icons.login),
           onPressed: () async {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: "12345")));
           });
     }
   }
@@ -59,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => ProfilePage()),
+                          builder: (context) => BookDetailsView(isbn: "12345")),
                     );
                   },
                 ),
