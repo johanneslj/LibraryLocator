@@ -3,7 +3,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import 'book_details_view.dart';
-import 'home.dart';
 
 void main() {
   runApp(MyApp());
@@ -130,7 +129,7 @@ class _MyHomePageState extends State<MyHomePage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => BookDetailsView()),
+                builder: (context) => BookDetailsView(isbn:"12345")),
           );
           },
         child: Icon(Icons.add),

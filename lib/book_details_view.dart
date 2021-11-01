@@ -1,15 +1,21 @@
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:library_locator/review_list.dart';
 
 import 'database_service.dart';
 
-class BookDetailsView extends StatelessWidget {
-  DatabaseService dbService = new DatabaseService();
+class BookDetailsView extends StatefulWidget {
+  BookDetailsView({Key? key, required this.isbn}) : super(key: key);
+  final String isbn;
+
+  @override
+  _BookDetailsViewState createState() => _BookDetailsViewState();
+}
+
+class _BookDetailsViewState extends State<BookDetailsView> {
+  final DatabaseService dbService = new DatabaseService();
 
   Widget build(BuildContext context) {
-    dbService.setReviews();
     return Scaffold(
         appBar: AppBar(
           title: Text('Book view'),
@@ -22,13 +28,15 @@ class BookDetailsView extends StatelessWidget {
                 Image(
                     image: NetworkImage(
                         'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                    height: 300
-                ),
-                ReviewList(),
+                    height: 300),
+                ReviewList(isbn: widget.isbn),
               ],
             ),
           ),
         ));
   }
 
+  void initState() {
+    super.initState();
+  }
 }

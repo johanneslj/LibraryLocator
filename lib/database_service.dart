@@ -6,8 +6,9 @@ class DatabaseService {
   final database = FirebaseDatabase.instance.reference();
   List<Widget> reviewList = <Widget>[];
 
-  Future<List<Widget>> setReviews() async {
-    final reviews = database.child("books/12345/reviews/");
+  /// Get all the reviews for a book on the given isbn number
+  Future<List<Widget>> getAllReviewsForBook(String isbn) async {
+    final reviews = database.child("books/"+ isbn +"/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     await reviews.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);

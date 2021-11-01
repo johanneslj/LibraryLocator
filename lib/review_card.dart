@@ -32,7 +32,7 @@ class _ReviewCardState extends State<ReviewCard> {
               minRating: 0,
               ignoreGestures: true,
               direction: Axis.horizontal,
-              itemSize: 20,
+              itemSize: 10,
               itemCount: 5,
               itemPadding: EdgeInsets.symmetric(horizontal: 0.0),
               itemBuilder: (context, _) => Icon(
