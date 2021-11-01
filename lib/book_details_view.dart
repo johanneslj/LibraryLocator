@@ -47,7 +47,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                     fontWeight: FontWeight.bold, fontSize: 30)),
                             RatingBar.builder(
                               initialRating: averageRating,
-                              minRating: 0,
+                              allowHalfRating: true,
                               ignoreGestures: true,
                               direction: Axis.horizontal,
                               itemSize: 10,
