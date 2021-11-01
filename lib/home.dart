@@ -52,17 +52,19 @@ class _HomePageState extends State<HomePage> {
               }
               return Container(
                 height: 50,
-                color: Colors.amber[colorCodes[index]],
-                child: ElevatedButton(
-                  child: Text(entries[index]),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ProfilePage()),
-                    );
-                  },
-                ),
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 3),
+                  child: ElevatedButton(
+                    child: Text(entries[index]),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ProfilePage()),
+                      );
+                    },
+                  )
+                )
               );
             }));
   }

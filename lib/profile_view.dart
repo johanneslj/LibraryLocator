@@ -2,13 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:library_locator/database_service.dart';
 import 'package:library_locator/login_view.dart';
 import 'package:library_locator/main.dart';
 
 class ProfilePage extends StatefulWidget {
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
-
 }
 
 class _ProfilePageState extends State<ProfilePage> {
@@ -18,6 +19,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Column();
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +64,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
                   );
                 },
-
               )
             )
           ],
@@ -69,5 +71,4 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
-
 }
