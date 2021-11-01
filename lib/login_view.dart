@@ -55,8 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Email",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Email"),
                           TextFormField(
                             validator: (val) => val!.isEmpty || !val.contains("@")
                                 ? "Enter a valid email"
@@ -64,10 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                             // Username text field
                             controller: emailController,
                             decoration: InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.pinkAccent),
-                                ),
+                                focusedBorder: UnderlineInputBorder(),
                                 border: UnderlineInputBorder(
                                   borderSide: BorderSide(color: Colors.grey),
                                 ),
@@ -79,16 +75,12 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Password",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Password"),
                           TextFormField(
                             // Password text field
                             controller: passwordController,
                             decoration: InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.pinkAccent),
-                              ),
+                              focusedBorder: UnderlineInputBorder(),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
@@ -107,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                                   children: <Widget>[
                                     ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.pinkAccent,
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 10),
                                           fixedSize: const Size(330, 20),
@@ -144,8 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                                                  msg: msg,
                                                  toastLength: Toast.LENGTH_LONG,
                                                  gravity: ToastGravity.BOTTOM,
-                                                 backgroundColor: Colors.pinkAccent,
-                                                 textColor: Colors.white,
                                                  fontSize: 16.0);
                                             }
                                           }

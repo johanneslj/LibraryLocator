@@ -2,72 +2,141 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:library_locator/database_service.dart';
+import 'package:library_locator/home.dart';
 import 'package:library_locator/login_view.dart';
 import 'package:library_locator/main.dart';
+import 'package:library_locator/review_card.dart';
+
+import 'loan_model.dart';
 
 class ProfilePage extends StatefulWidget {
-
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  Future<List<LoanModel>> futureLoans = DatabaseService().getLoans(FirebaseAuth.instance.currentUser!.email.toString());
+  List<LoanModel> loans = List.empty();
 
-  Column reviewsColumn(BuildContext context) {
+  Future<List<Widget>> futureReviewCards = DatabaseService().getReviewsByUser(FirebaseAuth.instance.currentUser!.email.toString());
+  List<Widget> reviewCards = <Widget>[];
 
+  List<Widget> loanList(List<LoanModel> loans) {
+    List<Widget> loanCards = <Widget>[];
 
-    return Column();
+    for (LoanModel loan in loans) {
+      loanCards.add(
+          Container(
+          child: Row(
+            children: [
+              Image(
+                  image: NetworkImage(
+                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+                  height: 100),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("ISBN: " + loan.isbn!),
+                  Text("To: " + loan.to!),
+                  Text("From: " + loan.from!)
+                ],
+              )
+            ],
+      )));
+    }
+
+    return loanCards;
   }
-
-
 
   @override
   Widget build(BuildContext context) {
+    futureLoans.then((value) => loans = value);
+    futureReviewCards.then((value) => reviewCards = value);
+
     if (FirebaseAuth.instance.currentUser == null) {
       // When the user is not logged in return this
       return Scaffold(
-        appBar: AppBar(
-          title: Text("My profile"),
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("Please sign in to view your profile.", style: TextStyle(fontSize: 24)),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-              },
-              child: Text("Sign In"),
-            )
-          ]
-        )
-      );
-    } else { // When the user is logged in return this
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("My profile"),
-        ),
-        body: Column(
-          children: <Widget>[
-            Center(
-              child: Text(
-                  FirebaseAuth.instance.currentUser!.email.toString().split("@")[0],
-                  style: TextStyle(fontSize: 28),
-              )
+          appBar: AppBar(
+            title: Text("My profile"),
+          ),
+          body: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text("Please sign in to view your profile.",
+                    style: TextStyle(fontSize: 24)),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginPage()));
+                  },
+                  child: Text("Sign In"),
+                )
+              ]));
+    } else {
+      // When the user is logged in return this
+      return FutureBuilder(
+        future: futureLoans,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("My profile"),
             ),
-            Text("Loan history:", style: TextStyle(fontSize: 20)),
-            SingleChildScrollView(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return Container(
-
-                  );
-                },
-              )
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Center(
+                    child: Text(
+                      FirebaseAuth.instance.currentUser!.email.toString().split("@")[0],
+                      style: TextStyle(fontSize: 28)
+                    )
+                ),
+                Text("Loan history:", style: TextStyle(fontSize: 20)),
+                Container(
+                  height: 255,
+                  padding: EdgeInsets.only(left: 4, right: 4),
+                  child: ListView(children: loanList(loans)),
+                ),
+                Text("Reviews:", style: TextStyle(fontSize: 20)),
+                Container(
+                  height: 255,
+                  padding: EdgeInsets.only(left: 4, right: 4),
+                  child: ListView(children: reviewCards),
+                ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showDialog(context: context, builder: (context) {
+                        return AlertDialog(
+                          title: Text("Delete account"),
+                          content: Text("Are you sure you want to delete your account? This action can not be reverted."),
+                          actions: <Widget>[
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  },
+                                child: Text("Cancel")
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                FirebaseAuth.instance.currentUser!.delete();
+                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                              },
+                              child: Text("Delete")
+                            )
+                          ]
+                        );
+                      });
+                    },
+                    child: Text("Delete account"),
+                  )
+                )
+              ]
             )
-          ],
-        )
+          );
+        }
       );
     }
   }
