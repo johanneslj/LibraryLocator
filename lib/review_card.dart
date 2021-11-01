@@ -23,7 +23,7 @@ class _ReviewCardState extends State<ReviewCard> {
     return Container(
         child: Row(children: [
       Padding(
-        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
         child: Column(
           children: [
             Text(widget.username, textAlign: TextAlign.left),
@@ -45,7 +45,7 @@ class _ReviewCardState extends State<ReviewCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
-      Text(widget.reviewText)
+      Flexible(child: Text(widget.reviewText, overflow: TextOverflow.visible)),
     ]));
   }
 
