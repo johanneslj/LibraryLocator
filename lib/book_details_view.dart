@@ -1,10 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:library_locator/review_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 
-import 'book_availability_dropdown.dart';
+import 'select_and_loan_book.dart';
 import 'database_service.dart';
 
 class BookDetailsView extends StatefulWidget {
@@ -23,11 +26,19 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   late GoogleMapController mapController;
 
   TextEditingController reviewTextController = TextEditingController();
+  LatLng _initialcameraposition = LatLng(62.4721, 6.2355);
+  late GoogleMapController _controller;
+  Location _location = Location();
 
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
+  void _onMapCreated(GoogleMapController _cntlr) {
+    _controller = _cntlr;
+    _location.onLocationChanged.listen((l) {
+      _controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 70),
+        ),
+      );
+    });
   }
 
   Widget build(BuildContext context) {
@@ -70,26 +81,17 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                       Padding(
                           padding: EdgeInsets.all(10),
                           child: SizedBox(
-                              width: 150, // or use fixed size like 200
-                              height: 150,
-                              child: GoogleMap(
-                                  onMapCreated: _onMapCreated,
-                                  initialCameraPosition: CameraPosition(
-                                    target: _center,
-                                    zoom: 11.0,
-                                  )))),
+                            width: 150, // or use fixed size like 200
+                            height: 150,
+                            child: GoogleMap(
+                              initialCameraPosition: CameraPosition(target: _initialcameraposition),
+                              mapType: MapType.normal,
+                              onMapCreated: _onMapCreated,
+                              myLocationEnabled: true,
+                            ),
+                          )),
                       Column(children: [
-                        BookAvailabilityDropdown(isbn: widget.isbn, closest: "ABsb"),
-                        ElevatedButton(
-                          child: Text("Loan book"),
-                          onPressed: () {
-                            print(BookAvailabilityDropdown(
-                              isbn: widget.isbn,
-                              closest: "Abababs",
-                            ).toString());
-                            //dbService.loanBook(widget.isbn, );
-                          },
-                        ),
+                        SelectAndLoanBook(isbn: widget.isbn, closest: ""), //TODO make dropdown work based on library that is closest,
                       ])
                     ]),
                     Padding(
@@ -99,7 +101,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           InkWell(
                               child: Container(width: 30, height: 30, child: Icon(Icons.add, color: Colors.blue)),
                               onTap: () {
-                                Future.delayed(const Duration(milliseconds: 400));
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) {

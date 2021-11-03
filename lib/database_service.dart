@@ -63,8 +63,11 @@ class DatabaseService {
     reviewsUser.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
   }
 
-  void loanBook(String isbn, String library) {
-    final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/");
-    //reviews.set()
+  void loanBook(String isbn, String selected) {
+    String selectedLibrary = selected.split(" ")[0];
+    int currentlyAvailable = int.parse(selected.split("Tilgjengelig: ")[1]) - 1;
+
+    final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
+    availability.set(currentlyAvailable);
   }
 }
