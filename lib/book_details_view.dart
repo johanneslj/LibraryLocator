@@ -22,6 +22,8 @@ class _BookDetailsViewState extends State<BookDetailsView> {
 
   late GoogleMapController mapController;
 
+  TextEditingController reviewTextController = TextEditingController();
+
   final LatLng _center = const LatLng(45.521563, -122.677433);
 
   void _onMapCreated(GoogleMapController controller) {
@@ -94,57 +96,63 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                         padding: EdgeInsets.all(10),
                         child: Row(children: [
                           Text("Reviews", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-                          ElevatedButton(
-                            child: Text("Add Review"),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Add Review'),
-                                      content: Container(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Form(
-                                            child: Column(
-                                              children: [
-                                                RatingBar.builder(
-                                                  initialRating: 3,
-                                                  minRating: 0,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemCount: 5,
-                                                  itemBuilder: (context, _) => Icon(
-                                                    Icons.star,
-                                                    color: Colors.amber,
+                          InkWell(
+                              child: Container(width: 30, height: 30, child: Icon(Icons.add, color: Colors.blue)),
+                              onTap: () {
+                                Future.delayed(const Duration(milliseconds: 400));
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Add Review'),
+                                        content: Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(0),
+                                            child: Form(
+                                              child: Column(
+                                                children: [
+                                                  RatingBar.builder(
+                                                    initialRating: 3,
+                                                    minRating: 0,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemBuilder: (context, _) => Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {
+                                                      setRating(rating.toString());
+                                                    },
                                                   ),
-                                                  onRatingUpdate: (rating) {
-                                                    setRating(rating.toString());
-                                                  },
-                                                ),
-                                                TextField(
-                                                  keyboardType: TextInputType.multiline,
-                                                  maxLines: 6,
-                                                  decoration: InputDecoration(
-                                                    labelText: 'Review',
+                                                  TextField(
+                                                    keyboardType: TextInputType.multiline,
+                                                    controller: reviewTextController,
+                                                    maxLines: 6,
+                                                    decoration: InputDecoration(
+                                                      labelText: 'Review',
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ),
+                                          width: 700,
+                                          height: 250,
                                         ),
-                                        width: 700,
-                                        height: 250,
-                                      ),
-                                      actions: [ElevatedButton(child: Text("Submit"), onPressed: () {
-                                        print(getRating());
-                                        Navigator.pop(context);
-                                        setRating("3");
-                                      })],
-                                    );
-                                  });
-                            },
-                          ),
+                                        actions: [
+                                          ElevatedButton(
+                                              child: Text("Submit"),
+                                              onPressed: () {
+                                                print(getRating());
+                                                dbService.addReview(widget.isbn, "user", double.parse(getRating()), reviewTextController.text);
+                                                Navigator.pop(context);
+                                                setRating("3");
+                                              })
+                                        ],
+                                      );
+                                    });
+                              }),
                         ])),
                     ReviewList(isbn: widget.isbn),
                   ],
