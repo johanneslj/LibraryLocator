@@ -66,8 +66,15 @@ class DatabaseService {
   void loanBook(String isbn, String selected) {
     String selectedLibrary = selected.split(" ")[0];
     int currentlyAvailable = int.parse(selected.split("Tilgjengelig: ")[1]) - 1;
-
     final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
     availability.set(currentlyAvailable);
+
+    final userLoan = firebaseDatabase.child("users/" + "user" + "/loans/" + isbn);
+    DateTime now = new DateTime.now();
+    DateTime from = new DateTime(now.year, now.month, now.day);
+    DateTime to = new DateTime(now.year, now.month, now.day + 30);
+    String fromString = "" + from.year.toString() + "-" + from.month.toString() + "-" + from.day.toString();
+    String toString = "" + to.year.toString() + "-" + to.month.toString() + "-" + to.day.toString();
+    userLoan.set({"from": fromString, "to": toString}).catchError((error) => print(error));
   }
 }
