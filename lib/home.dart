@@ -4,6 +4,7 @@ import 'package:library_locator/profile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'book_details_view.dart';
 import 'login_view.dart';
 import 'main.dart';
 

@@ -1,6 +1,8 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:library_locator/loan_model.dart';
 import 'package:library_locator/review_card.dart';
+import 'loan_model.dart';
 
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
