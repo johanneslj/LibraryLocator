@@ -35,7 +35,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
     _location.onLocationChanged.listen((l) {
       _controller.animateCamera(
         CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 70),
+          CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 15),
         ),
       );
     });
