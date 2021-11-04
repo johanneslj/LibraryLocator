@@ -2,34 +2,42 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:library_locator/review_card.dart';
 
-import 'loan_model.dart';
-
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
   List<Widget> reviewList = <Widget>[];
 
   /// Get all the reviews for a book on the given isbn number
   Future<List<Widget>> getAllReviewsForBook(String isbn) async {
-    final reviews = firebaseDatabase.child("books/"+ isbn +"/reviews/");
+    final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     await reviews.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
         // Here key is the reviewers Name/ID and the value consists of the star rating and text in the review
-        List<String> listOfReviewContent =
-        value.toString().replaceAll("}", "").split(",");
+        List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
         String reviewText = listOfReviewContent.elementAt(1).split("text: ").elementAt(1);
-        double reviewStars = double.parse(
-            listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-        reviewList.add(new ReviewCard(
-            stars: reviewStars, reviewText: reviewText, username: key));
+        double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+        reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key));
       });
     });
     return reviewList;
   }
 
+  Future<Map<String, String>> getAvailability(String isbn) async {
+    final reviews = firebaseDatabase.child("books/" + isbn + "/availability/");
+    Map<String, String> availability = new Map<String, String>();
+    Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+    await reviews.get().then((DataSnapshot snapshot) {
+      data = new Map<dynamic, dynamic>.from(snapshot.value);
+      data.forEach((key, value) {
+        String numberAvailable = value.toString();
+        availability.putIfAbsent(key, () => numberAvailable);
+      });
+    });
+    return availability;
+  }
 
-  Future<double> getAverageRating(String isbn) async {
+ Future<double> getAverageRating(String isbn) async {
     double averageRating = 0;
     final reviews = firebaseDatabase.child("books/"+ isbn +"/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
@@ -46,8 +54,8 @@ class DatabaseService {
     });
 
     return averageRating;
-  }
-  
+ }
+
   Future<List<LoanModel>> getLoans(String email) async {
     List<LoanModel> loanList = <LoanModel>[];
 
@@ -63,7 +71,7 @@ class DatabaseService {
         loanList.add(new LoanModel(email, key.toString(), loanDates["from"], loanDates["to"]));
       });
     });
-    
+
     return loanList;
   }
 
@@ -90,4 +98,27 @@ class DatabaseService {
 
     return reviewCards;
   }
+
+  void addReview(String isbn, String name, double rating, String reviewText) {
+    final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/" + name);
+    final reviewsUser = firebaseDatabase.child("users/" + name + "/reviews/" + isbn);
+    reviews.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
+    reviewsUser.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
+  }
+
+  void loanBook(String isbn, String selected) {
+    String selectedLibrary = selected.split(" ")[0];
+    int currentlyAvailable = int.parse(selected.split("Tilgjengelig: ")[1]) - 1;
+    final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
+    availability.set(currentlyAvailable);
+
+    final userLoan = firebaseDatabase.child("users/" + "user" + "/loans/" + isbn);
+    DateTime now = new DateTime.now();
+    DateTime from = new DateTime(now.year, now.month, now.day);
+    DateTime to = new DateTime(now.year, now.month, now.day + 30);
+    String fromString = "" + from.year.toString() + "-" + from.month.toString() + "-" + from.day.toString();
+    String toString = "" + to.year.toString() + "-" + to.month.toString() + "-" + to.day.toString();
+    userLoan.set({"from": fromString, "to": toString}).catchError((error) => print(error));
+  }
+
 }

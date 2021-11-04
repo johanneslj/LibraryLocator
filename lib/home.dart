@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
           icon: Icon(Icons.login),
           onPressed: () async {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => LoginPage()));
+                context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: "12345")));
           });
     }
   }
@@ -52,19 +52,17 @@ class _HomePageState extends State<HomePage> {
               }
               return Container(
                 height: 50,
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 3),
-                  child: ElevatedButton(
-                    child: Text(entries[index]),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ProfilePage()),
-                      );
-                    },
-                  )
-                )
+                padding: EdgeInsets.only(bottom: 3),
+                child: ElevatedButton(
+                  child: Text(entries[index]),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BookDetailsView(isbn: "12345")),
+                    );
+                  },
+                ),
               );
             }));
   }

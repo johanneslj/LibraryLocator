@@ -33,10 +33,8 @@ class _AppState extends State<App> {
           return MaterialApp(
             title: 'Library Locator',
             theme: ThemeData(
-              brightness: Brightness.dark,
-              primarySwatch: Colors.amber,
-              highlightColor: Colors.amberAccent,
-              shadowColor: Colors.amberAccent,
+              brightness: Brightness.light,
+              primarySwatch: Colors.pink,
               ),
             home: HomePage(),
           );
