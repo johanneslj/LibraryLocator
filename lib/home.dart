@@ -17,33 +17,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  IconButton signInAndOutButton(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      return IconButton(
-          icon: Icon(Icons.logout),
-          onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-            setState(() => null);
-          });
-    } else {
-      return IconButton(
-          icon: Icon(Icons.login),
-          onPressed: () async {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: "12345")));
-          });
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final List<String> entries = <String>['A', 'B', 'C', 'D', 'E', 'F', 'G'];
     final List<int> colorCodes = <int>[600, 500, 100];
     return Scaffold(
-        appBar: AppBar(
-          title: Text('First Route'),
-          leading: signInAndOutButton(context),
-        ),
+
         body: ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: entries.length,
@@ -60,7 +39,7 @@ class _HomePageState extends State<HomePage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => BookDetailsView(isbn: "12345")),
+                          builder: (context) => ProfilePage()),
                     );
                   },
                 ),
