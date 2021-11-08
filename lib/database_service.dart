@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:library_locator/loan_model.dart';
@@ -19,7 +20,7 @@ class DatabaseService {
         List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
         String reviewText = listOfReviewContent.elementAt(1).split("text: ").elementAt(1);
         double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-        reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key));
+        reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key.split("@")[0]));
       });
     });
     return reviewList;
@@ -101,7 +102,9 @@ class DatabaseService {
     return reviewCards;
   }
 
-  void addReview(String isbn, String name, double rating, String reviewText) {
+  void addReview(String isbn, double rating, String reviewText) {
+    String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
+
     final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/" + name);
     final reviewsUser = firebaseDatabase.child("users/" + name + "/reviews/" + isbn);
     reviews.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
@@ -109,12 +112,14 @@ class DatabaseService {
   }
 
   void loanBook(String isbn, String selected) {
+    String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
+
     String selectedLibrary = selected.split(" ")[0];
     int currentlyAvailable = int.parse(selected.split("Tilgjengelig: ")[1]) - 1;
     final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
     availability.set(currentlyAvailable);
 
-    final userLoan = firebaseDatabase.child("users/" + "user" + "/loans/" + isbn);
+    final userLoan = firebaseDatabase.child("users/" + name + "/loans/" + isbn);
     DateTime now = new DateTime.now();
     DateTime from = new DateTime(now.year, now.month, now.day);
     DateTime to = new DateTime(now.year, now.month, now.day + 30);

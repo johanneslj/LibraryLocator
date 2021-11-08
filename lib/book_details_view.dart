@@ -146,7 +146,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                               child: Text("Submit"),
                                               onPressed: () {
                                                 print(getRating());
-                                                dbService.addReview(widget.isbn, "user", double.parse(getRating()), reviewTextController.text);
+                                                dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text);
                                                 Navigator.pop(context);
                                                 setRating("3");
                                               })
