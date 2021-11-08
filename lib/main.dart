@@ -58,8 +58,7 @@ class _AppState extends State<App> {
           if (snapshot.hasError) {
             print(snapshot.error);
           }
-
-          // After initialization, app is shown
+  // After initialization, app is shown
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'Library Locator',

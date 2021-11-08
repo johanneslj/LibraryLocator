@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -7,6 +5,7 @@ import 'package:library_locator/review_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import 'google_map_widget.dart';
 import 'select_and_loan_book.dart';
 import 'database_service.dart';
 
@@ -83,12 +82,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           child: SizedBox(
                             width: 150, // or use fixed size like 200
                             height: 150,
-                            child: GoogleMap(
-                              initialCameraPosition: CameraPosition(target: _initialcameraposition),
-                              mapType: MapType.normal,
-                              onMapCreated: _onMapCreated,
-                              myLocationEnabled: true,
-                            ),
+                            child: MapWidget(),
                           )),
                       Column(children: [
                         SelectAndLoanBook(isbn: widget.isbn, closest: ""), //TODO make dropdown work based on library that is closest,
