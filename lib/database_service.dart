@@ -61,7 +61,7 @@ class DatabaseService {
   Future<List<LoanModel>> getLoans(String email) async {
     List<LoanModel> loanList = <LoanModel>[];
 
-    final loans = firebaseDatabase.child("users/" + email.split("@")[0] + "/loans");
+    final loans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans");
 
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     Map<dynamic, dynamic> loanDates;
@@ -80,7 +80,7 @@ class DatabaseService {
   Future<List<Widget>> getReviewsByUser(String email) async {
     List<Widget> reviewCards = <Widget>[];
 
-    final reviews = firebaseDatabase.child("users/" + email.split("@")[0] + "/reviews");
+    final reviews = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/reviews");
 
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     Map<dynamic, dynamic> reviewContent;

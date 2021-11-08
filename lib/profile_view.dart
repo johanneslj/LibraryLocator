@@ -96,67 +96,69 @@ class _ProfilePageState extends State<ProfilePage> {
       futureLoans.then((value) => loans = value);
       futureReviewCards.then((value) => reviewCards = value);
       // When the user is logged in return this
-      return FutureBuilder(
-        future: futureLoans,
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          return Scaffold(
-              appBar: AppBar(
-                title: Text('Home'),
-                actions: <Widget>[signInAndOutButton(context)],
-              ),
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Center(
+      return Scaffold(
+          appBar: AppBar(
+            title: Text('Home'),
+            actions: <Widget>[signInAndOutButton(context)],
+          ),
+        body: ListView(
+          children: <Widget>[
+            Center(
+                child: Padding(padding: EdgeInsets.only(top: 5, bottom: 5),
                     child: Text(
-                      FirebaseAuth.instance.currentUser!.email.toString().split("@")[0],
-                      style: TextStyle(fontSize: 28)
-                    )
-                ),
-                Text("Loan history:", style: TextStyle(fontSize: 20)),
-                Container(
-                  height: 255,
-                  padding: EdgeInsets.only(left: 4, right: 4),
-                  child: ListView(children: loanList(loans)),
-                ),
-                Text("Reviews:", style: TextStyle(fontSize: 20)),
-                Container(
-                  height: 255,
-                  padding: EdgeInsets.only(left: 4, right: 4),
-                  child: ListView(children: reviewCards),
-                ),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      showDialog(context: context, builder: (context) {
-                        return AlertDialog(
-                          title: Text("Delete account"),
-                          content: Text("Are you sure you want to delete your account? This action can not be reverted."),
-                          actions: <Widget>[
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                  },
-                                child: Text("Cancel")
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                FirebaseAuth.instance.currentUser!.delete();
-                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                        FirebaseAuth.instance.currentUser!.email.toString().split("@")[0],
+                        style: TextStyle(fontSize: 28)
+        ))
+
+            ),
+            Text("Loan history:", style: TextStyle(fontSize: 20)),
+            Container(
+              height: 255,
+              padding: EdgeInsets.only(left: 4, right: 4),
+              child: FutureBuilder( // Displays loan history when request is completed
+                  future: futureLoans,
+                  builder: (context, builder) {
+                    return ListView(children: loanList(loans));})
+            ),
+            Text("Reviews:", style: TextStyle(fontSize: 20)),
+            Container(
+              height: 255,
+              padding: EdgeInsets.only(left: 4, right: 4),
+              child: FutureBuilder( // Builds review cards when request is completed
+                  future: futureReviewCards,
+                  builder: (context, builder) {
+                    return ListView(children: reviewCards);})
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  showDialog(context: context, builder: (context) {
+                    return AlertDialog(
+                      title: Text("Delete account"),
+                      content: Text("Are you sure you want to delete your account? This action can not be reverted."),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
                               },
-                              child: Text("Delete")
-                            )
-                          ]
-                        );
-                      });
-                    },
-                    child: Text("Delete account"),
-                  )
-                )
-              ]
+                            child: Text("Cancel")
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.currentUser!.delete();
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                          },
+                          child: Text("Delete")
+                        )
+                      ]
+                    );
+                  });
+                },
+                child: Text("Delete account"),
+              )
             )
-          );
-        }
+          ]
+        )
       );
     }
   }
