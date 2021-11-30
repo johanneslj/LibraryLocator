@@ -6,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'book_details_view.dart';
 import 'database_service.dart';
-import 'login_view.dart';
-import 'main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  /*
   IconButton signInAndOutButton(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
       return IconButton(
@@ -34,6 +33,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+   */
+
   @override
   Widget build(BuildContext context) {
     Future<List<Widget>> futureBookCards = DatabaseService().getAllBooks();
@@ -42,8 +43,11 @@ class _HomePageState extends State<HomePage> {
     futureBookCards.then((books) => bookCards = books);
 
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        title: Text("Home"),
+      ),
         body: Column(children: [
-      Text("Books", style: TextStyle(fontSize: 20)),
       Container(
           height: 255,
           padding: EdgeInsets.only(left: 4, right: 4),

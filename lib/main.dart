@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:library_locator/profile_view.dart';
 import 'package:library_locator/providers/bottom_navigation_provider.dart';
+import 'package:library_locator/search_view.dart';
 
 import 'book_details_view.dart';
 import 'bottom_navigation_bar_widget.dart';
@@ -39,8 +40,8 @@ class _AppState extends State<App> {
 
     final _currentUser = FirebaseAuth.instance.currentUser;
 
-    List<Widget> notLoggedIn = [HomePage(), BookDetailsView(isbn: "12345"), LoginPage()];
-    List<Widget> userWidgetsList = [HomePage(), BookDetailsView(isbn: "12345"), ProfilePage()];
+    List<Widget> notLoggedIn = [HomePage(), SearchView(), LoginPage()];
+    List<Widget> userWidgetsList = [HomePage(), SearchView(), ProfilePage()];
 
 
     if (_currentUser != null) {
@@ -64,7 +65,7 @@ class _AppState extends State<App> {
               title: 'Library Locator',
               theme: ThemeData(
                 brightness: Brightness.light,
-                primarySwatch: Colors.pink,
+                primarySwatch: Colors.blue,
                 textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
                         primary: Colors.white)
