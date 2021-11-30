@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:library_locator/register_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
+import 'main.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPage({Key? key}) : super(key: key);
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          HomePage()));
+                                                          App()));
                                             } on FirebaseAuthException catch (e) {
                                              print(e.toString());
                                              String msg = "";

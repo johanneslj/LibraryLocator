@@ -52,7 +52,7 @@ class _ProfilePageState extends State<ProfilePage> {
         onPressed: () {
           FirebaseAuth.instance.signOut();
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
+              context, MaterialPageRoute(builder: (context) => App()));
         },
         icon: Icon(Icons.logout),
         label: Text("Sign Out"),);
