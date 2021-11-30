@@ -65,6 +65,10 @@ class _AppState extends State<App> {
               theme: ThemeData(
                 brightness: Brightness.light,
                 primarySwatch: Colors.pink,
+                textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                        primary: Colors.white)
+                )
               ),
               home: Scaffold(
                 body: Consumer(builder: (context, watch, child) {
