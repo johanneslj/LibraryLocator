@@ -80,13 +80,12 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                       Padding(
                           padding: EdgeInsets.all(10),
                           child: SizedBox(
-                            width: 150, // or use fixed size like 200
+                            width: 150,
                             height: 150,
                             child: MapWidget(),
                           )),
-                      Column(children: [
                         SelectAndLoanBook(isbn: widget.isbn, closest: ""), //TODO make dropdown work based on library that is closest,
-                      ])
+
                     ]),
                     Padding(
                         padding: EdgeInsets.all(10),

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:library_locator/providers/library_provider.dart';
 
 import 'database_service.dart';
 
@@ -51,7 +54,8 @@ class _SelectAndLoanBookState extends State<SelectAndLoanBook> {
                 ElevatedButton(
                     child: Text("Loan book"),
                     onPressed: !canLoan(selectedLibrary)
-                        ? null : () => {
+                        ? null
+                        : () => {
                               dbService.loanBook(widget.isbn, selectedLibrary),
                               selectedLibrary = "Select Library",
                               setState(() {}),
@@ -79,10 +83,14 @@ class _SelectAndLoanBookState extends State<SelectAndLoanBook> {
   bool isAvailable(String library) {
     bool isAvailable = false;
 
-    if(!library.split("Tilgjengelig: ")[1].contains("0")) {
+    if (!library.split("Tilgjengelig: ")[1].contains("0")) {
       isAvailable = true;
     }
 
     return isAvailable;
+  }
+
+  String getLibrary() {
+    return selectedLibrary;
   }
 }

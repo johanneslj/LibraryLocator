@@ -20,7 +20,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<List<LoanModel>> futureLoans = DatabaseService().getLoans(FirebaseAuth.instance.currentUser!.email.toString());
   List<LoanModel> loans = List.empty();
 
-  Future<List<Widget>> futureReviewCards = DatabaseService().getReviewsByUser(FirebaseAuth.instance.currentUser!.email.toString());
+  Future<List<Widget>> futureReviewCards = DatabaseService().getReviewsByUser(FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " "));
   List<Widget> reviewCards = <Widget>[];
 
   List<Widget> loanList(List<LoanModel> loans) {
