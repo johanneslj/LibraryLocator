@@ -60,9 +60,23 @@ class _SearchViewState extends State<SearchView> {
                         return Center(child: Text('Error: ${snapshot.error}'));
                       else
                         bookCards = snapshot.data!;
-                      return ListView(children: bookCards);
+                      return makeListView(bookCards);
                     }
                   })),
         ]));
   }
+
+  ListView makeListView(List<Widget> bookCards) {
+    return ListView(
+      children: [
+        for (var card in bookCards) Column(children: [
+          card,
+          if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
+          // then don't add a divider at the bottom.
+            Divider(),
+        ]),
+      ],
+    );
+  }
+
 }
