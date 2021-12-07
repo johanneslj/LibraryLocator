@@ -39,7 +39,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               averageRating = snapshot.data!;
             return Scaffold(
               appBar: AppBar(
-                title: Text('Book view'),
+                title: Text("Book Title"),
                 elevation: 0,
               ),
               body: Center(
