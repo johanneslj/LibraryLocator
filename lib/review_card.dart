@@ -40,10 +40,13 @@ class _ReviewCardState extends State<ReviewCard> {
             ),
           ],
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.end,
         ),
       ),
       Flexible(child: DescriptionTextWidget(text: widget.reviewText)),
-    ]));
+    ],
+        crossAxisAlignment: CrossAxisAlignment.start,
+        ));
   }
 
   void initState() {

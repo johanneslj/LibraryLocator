@@ -154,7 +154,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                   ],
                 ),
               ),
-              bottomNavigationBar: BottomNavigationBarWidget(),
             );
           }
         });
