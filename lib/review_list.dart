@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'database_service.dart';
 import 'package:flutter/cupertino.dart';
 
+import 'loadingScreenView.dart';
+
 class ReviewList extends StatefulWidget {
   final String isbn;
 
@@ -21,7 +23,7 @@ class _ReviewListState extends State<ReviewList> {
       future: dbService.getAllReviewsForBook(widget.isbn),
       builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: Text('Please wait its loading...'));
+          return Center(child: LoadingScreen(fontSize: 20,));
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));

@@ -6,9 +6,9 @@ import 'package:library_locator/profile_view.dart';
 import 'package:library_locator/providers/bottom_navigation_provider.dart';
 import 'package:library_locator/search_view.dart';
 
-import 'book_details_view.dart';
 import 'bottom_navigation_bar_widget.dart';
 import 'home.dart';
+import 'loadingScreenView.dart';
 import 'login_view.dart';
 
 class Logger extends ProviderObserver {
@@ -84,14 +84,9 @@ class _AppState extends State<App> {
           }
 
           // While app is initializing
-          return LoadingScreen();
+          return LoadingScreen(fontSize: 30);
         });
   }
 }
 
-class LoadingScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: Text('Loading...'));
-  }
-}
+

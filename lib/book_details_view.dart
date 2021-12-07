@@ -5,7 +5,9 @@ import 'package:library_locator/review_list.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
+import 'bottom_navigation_bar_widget.dart';
 import 'google_map_widget.dart';
+import 'loadingScreenView.dart';
 import 'select_and_loan_book.dart';
 import 'database_service.dart';
 
@@ -25,7 +27,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   late GoogleMapController mapController;
 
   TextEditingController reviewTextController = TextEditingController();
-  LatLng _initialcameraposition = LatLng(62.4721, 6.2355);
   late GoogleMapController _controller;
   Location _location = Location();
 
@@ -45,7 +46,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
         future: dbService.getAverageRating(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Text('Please wait its loading...'));
+            return Center(child: LoadingScreen(fontSize: 30,));
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -54,6 +55,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
             return Scaffold(
               appBar: AppBar(
                 title: Text('Book view'),
+                elevation: 0,
               ),
               body: Center(
                 child: ListView(
