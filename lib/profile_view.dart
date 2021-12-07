@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("ISBN: " + loan.isbn!), Text("To: " + loan.to!), Text("From: " + loan.from!)],
+            children: [Text("Title: " + loan.title), Text("To: " + loan.to!), Text("From: " + loan.from!)],
           )
         ],
       )));

@@ -70,13 +70,14 @@ class DatabaseService {
     final loans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans");
 
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-    Map<dynamic, dynamic> loanDates;
+    Map<dynamic, dynamic> innerData;
 
     await loans.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
-        loanDates = new Map<dynamic, dynamic>.from(value);
-        loanList.add(new LoanModel(email, key.toString(), loanDates["from"], loanDates["to"]));
+        innerData = new Map<dynamic, dynamic>.from(value);
+        String title = "Placeholder title"; // TODO Get title with ISBN from backend here!
+        loanList.add(new LoanModel(email, title, key.toString(), innerData["from"], innerData["to"]));
       });
     });
 

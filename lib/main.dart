@@ -64,8 +64,8 @@ class _AppState extends State<App> {
             return MaterialApp(
               title: 'Library Locator',
               theme: ThemeData(
-                brightness: Brightness.light,
-                primarySwatch: Colors.blue,
+                brightness: Brightness.dark,
+                primarySwatch: Colors.amber,
                 textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
                         primary: Colors.white)
