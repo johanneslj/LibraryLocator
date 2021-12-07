@@ -9,12 +9,7 @@ class ReviewCard extends StatefulWidget {
   final String reviewText;
   final String username;
 
-  const ReviewCard(
-      {Key? key,
-      required this.stars,
-      required this.reviewText,
-      required this.username})
-      : super(key: key);
+  const ReviewCard({Key? key, required this.stars, required this.reviewText, required this.username}) : super(key: key);
 
   @override
   _ReviewCardState createState() => _ReviewCardState();
@@ -23,30 +18,33 @@ class ReviewCard extends StatefulWidget {
 class _ReviewCardState extends State<ReviewCard> {
   Widget build(BuildContext context) {
     return Container(
-        child: Row(children: [
-      Padding(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-        child: Column(
-          children: [
-            Text(widget.username, textAlign: TextAlign.left),
-            RatingBarIndicator(
-              rating: widget.stars,
-              itemBuilder: (context, index) => Icon(
-                Icons.star,
-                color: Colors.amber,
-              ),
-              itemCount: 5,
-              itemSize: 10,
+        child: Column(children: [
+      Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: Column(
+              children: [
+                Text(widget.username, textAlign: TextAlign.left),
+                RatingBarIndicator(
+                  rating: widget.stars,
+                  itemBuilder: (context, index) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  itemCount: 5,
+                  itemSize: 10,
+                ),
+              ],
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
             ),
-          ],
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.end,
-        ),
-      ),
-      Flexible(child: DescriptionTextWidget(text: widget.reviewText)),
-    ],
+          ),
+          Flexible(child: DescriptionTextWidget(text: widget.reviewText)),
+        ],
         crossAxisAlignment: CrossAxisAlignment.start,
-        ));
+      )
+    ]));
   }
 
   void initState() {
