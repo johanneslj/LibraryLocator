@@ -1,4 +1,3 @@
-import 'package:location/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maps_launcher/maps_launcher.dart';
@@ -13,7 +12,7 @@ class _MapWidgetState extends State<MapWidget> {
 
   LatLng _initialCameraPosition = LatLng(62.4721, 6.2355);
   late GoogleMapController _controller;
-  Map<String, LatLng> libraries = {"Trondheim": LatLng(63.417459290344574, 10.404071511864087), "Ålesund": LatLng(62.4721, 6.2355)};
+  Map<String, LatLng> libraries = {"Trondheim": LatLng(63.417459290344574, 10.404071511864087), "Ålesund": LatLng(62.4721, 6.2355), "Gjøvik": LatLng(60.788900481979894, 10.681104191626043)};
 
   void _onMapCreated(GoogleMapController _cntlr) {
     _controller = _cntlr;

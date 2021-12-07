@@ -1,8 +1,4 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:library_locator/profile_view.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'database_service.dart';
 import 'loadingScreenView.dart';
@@ -89,10 +85,6 @@ class _SearchViewState extends State<SearchView> {
         IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            if (_searchQueryController == null || _searchQueryController.text.isEmpty) {
-              Navigator.pop(context);
-              return;
-            }
             _clearSearchQuery();
           },
         ),
@@ -101,8 +93,10 @@ class _SearchViewState extends State<SearchView> {
 
     return <Widget>[
       IconButton(
-        icon: const Icon(Icons.search),
-        onPressed: _startSearch,
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          _clearSearchQuery();
+        },
       ),
     ];
   }
