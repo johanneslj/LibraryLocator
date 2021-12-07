@@ -76,8 +76,9 @@ class DatabaseService {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
         innerData = new Map<dynamic, dynamic>.from(value);
-        String title = "Placeholder title"; // TODO Get title with ISBN from backend here!
-        loanList.add(new LoanModel(email, title, key.toString(), innerData["from"], innerData["to"]));
+        String title = "Placeholder title: Extra long version"; // TODO Get title with ISBN from backend here!
+        String imageUrl = "https://bit.ly/3DxOC5k"; // TODO Get image url from backend
+        loanList.add(new LoanModel(email, title, imageUrl, key.toString(), innerData["from"], innerData["to"]));
       });
     });
 
@@ -151,7 +152,7 @@ class DatabaseService {
 
         Future<double> averageRating = getAverageRating(key);
 
-        bookList.add(new BookCard(
+        bookList.add(new BookCard( // TODO Get information about book from backend
           stars: averageRating,
           imageURL: "https://bit.ly/3DxOC5k",
           author: "Hans",

@@ -18,9 +18,7 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  ScrollController _mainScrollCtrl = ScrollController();
-
-  ScrollController controller = ScrollController();
+  ScrollController _controller = ScrollController();
   ScrollController _loanScrollCtrl = ScrollController();
   ScrollController _reviewScrollCtrl = ScrollController();
 
@@ -31,12 +29,19 @@ class _ProfilePageState extends State<ProfilePage> {
       loanCards.add(Container(
           child: Row(
         children: [
-          Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 100),
+          Image(image: NetworkImage(loan.imageUrl!), height: 100, width: 100),
+          Flexible(child:
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("Title: " + loan.title), Text("To: " + loan.to!), Text("From: " + loan.from!)],
-          )
+            children: [
+              Text(loan.title!,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  overflow: TextOverflow.ellipsis),
+              Text("To: " + loan.to!, style: TextStyle(fontSize: 22)),
+              Text("From: " + loan.from!, style: TextStyle(fontSize: 22))],
+          ))
+
         ],
       )));
     }
@@ -114,7 +119,7 @@ class _ProfilePageState extends State<ProfilePage> {
             actions: <Widget>[signInAndOutButton(context)],
           ),
           body: ListView(
-              controller: controller,
+              controller: _controller,
               children: <Widget>[
                 Center(
                     child: Padding(
@@ -131,15 +136,15 @@ class _ProfilePageState extends State<ProfilePage> {
                                 // Lets the child ListView scroll the parent when reaching either edge.
                                 return NotificationListener<OverscrollNotification>(
                                   onNotification: (OverscrollNotification value) {
-                                    if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
-                                      if (controller.offset != 0) controller.jumpTo(0);
+                                    if (value.overscroll < 0 && _controller.offset + value.overscroll <= 0) {
+                                      if (_controller.offset != 0) _controller.jumpTo(0);
                                       return true;
                                     }
-                                    if (controller.offset + value.overscroll >= controller.position.maxScrollExtent) {
-                                      if (controller.offset != controller.position.maxScrollExtent) controller.jumpTo(controller.position.maxScrollExtent);
+                                    if (_controller.offset + value.overscroll >= _controller.position.maxScrollExtent) {
+                                      if (_controller.offset != _controller.position.maxScrollExtent) _controller.jumpTo(_controller.position.maxScrollExtent);
                                       return true;
                                     }
-                                    controller.jumpTo(controller.offset + value.overscroll);
+                                    _controller.jumpTo(_controller.offset + value.overscroll);
                                     return true;
                                   },
                                   child: ListView(
@@ -158,15 +163,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               builder: (context, builder) {
                                 return NotificationListener<OverscrollNotification>(
                                       onNotification: (OverscrollNotification value) {
-                                        if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
-                                          if (controller.offset != 0) controller.jumpTo(0);
+                                        if (value.overscroll < 0 && _controller.offset + value.overscroll <= 0) {
+                                          if (_controller.offset != 0) _controller.jumpTo(0);
                                           return true;
                                         }
-                                        if (controller.offset + value.overscroll >= controller.position.maxScrollExtent) {
-                                          if (controller.offset != controller.position.maxScrollExtent) controller.jumpTo(controller.position.maxScrollExtent);
+                                        if (_controller.offset + value.overscroll >= _controller.position.maxScrollExtent) {
+                                          if (_controller.offset != _controller.position.maxScrollExtent) _controller.jumpTo(_controller.position.maxScrollExtent);
                                           return true;
                                         }
-                                        controller.jumpTo(controller.offset + value.overscroll);
+                                        _controller.jumpTo(_controller.offset + value.overscroll);
                                         return true;
                                       },
                                       child: ListView(
