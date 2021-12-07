@@ -99,7 +99,7 @@ class DatabaseService {
       data.forEach((key, value) {
         reviewContent = new Map<dynamic, dynamic>.from(value);
 
-        String reviewText = reviewContent["text"];
+        String reviewText = reviewContent["text"].toString();
         double reviewStars = double.parse(reviewContent["stars"].toString());
 
         reviewCards.add(new ReviewCard(
@@ -151,7 +151,12 @@ class DatabaseService {
 
         Future<double> averageRating = getAverageRating(key);
 
-        bookList.add(new BookCard(stars: averageRating, imageURL: "", author: "Hans", title: "How to ski", isbn: key,));
+        bookList.add(new BookCard(
+          stars: averageRating,
+          imageURL: "https://bit.ly/3DxOC5k",
+          author: "Hans",
+          title: "How to ski",
+          isbn: key,));
       });
     });
 

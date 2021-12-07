@@ -17,6 +17,13 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
+  ScrollController _mainScrollCtrl = ScrollController();
+
+  ScrollController controller = ScrollController();
+  ScrollController _loanScrollCtrl = ScrollController();
+  ScrollController _reviewScrollCtrl = ScrollController();
+
   List<Widget> loanList(List<LoanModel> loans) {
     List<Widget> loanCards = <Widget>[];
 
@@ -41,8 +48,26 @@ class _ProfilePageState extends State<ProfilePage> {
     if (FirebaseAuth.instance.currentUser != null) {
       return TextButton.icon(
         onPressed: () {
-          FirebaseAuth.instance.signOut();
-          Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                    title: Text("Sign Out"),
+                    content: Text("Are you sure you want to sign out?"),
+                    actions: <Widget>[
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancel")),
+                      TextButton(
+                          onPressed: () {
+                            FirebaseAuth.instance.signOut();
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
+                          },
+                          child: Text("Sign Out"))
+                    ]);
+              });
         },
         icon: Icon(Icons.logout),
         label: Text("Sign Out"),
@@ -61,7 +86,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser == null) {
-      // When the user is not logged in return this
+      // When the user is not logged in return this.
       return Scaffold(
           appBar: AppBar(
             elevation: 0,
@@ -88,57 +113,94 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text('Profile'),
             actions: <Widget>[signInAndOutButton(context)],
           ),
-          body: ListView(children: <Widget>[
-            Center(
-                child: Padding(
+          body: ListView(
+              controller: controller,
+              children: <Widget>[
+                Center(
+                    child: Padding(
                     padding: EdgeInsets.only(top: 5, bottom: 5),
                     child: Text(FirebaseAuth.instance.currentUser!.email.toString().split("@")[0], style: TextStyle(fontSize: 28)))),
-            Text("Loan history:", style: TextStyle(fontSize: 20)),
-            Container(
-                height: 255,
-                padding: EdgeInsets.only(left: 4, right: 4),
-                child: FutureBuilder(
-                    // Displays loan history when request is completed
-                    future: futureLoans,
-                    builder: (context, builder) {
-                      return ListView(children: loanList(loans));
-                    })),
-            Text("Reviews:", style: TextStyle(fontSize: 20)),
-            Container(
-                height: 255,
-                padding: EdgeInsets.only(left: 4, right: 4),
-                child: FutureBuilder(
-                    // Builds review cards when request is completed
-                    future: futureReviewCards,
-                    builder: (context, builder) {
-                      return ListView(children: reviewCards);
-                    })),
-            Center(
-                child: ElevatedButton(
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                          title: Text("Delete account"),
-                          content: Text("Are you sure you want to delete your account? This action can not be reverted."),
-                          actions: <Widget>[
-                            TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Cancel")),
-                            TextButton(
-                                onPressed: () {
-                                  FirebaseAuth.instance.currentUser!.delete();
-                                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                                },
-                                child: Text("Delete"))
-                          ]);
-                    });
-              },
-              child: Text("Delete account"),
-            ))
+                      Text("Loan history:", style: TextStyle(fontSize: 20)),
+                      Container(
+                          height: 320,
+                          padding: EdgeInsets.only(left: 4, right: 4),
+                          child: FutureBuilder(
+                              // Displays loan history when request is completed
+                              future: futureLoans,
+                              builder: (context, builder) {
+                                // Lets the child ListView scroll the parent when reaching either edge.
+                                return NotificationListener<OverscrollNotification>(
+                                  onNotification: (OverscrollNotification value) {
+                                    if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
+                                      if (controller.offset != 0) controller.jumpTo(0);
+                                      return true;
+                                    }
+                                    if (controller.offset + value.overscroll >= controller.position.maxScrollExtent) {
+                                      if (controller.offset != controller.position.maxScrollExtent) controller.jumpTo(controller.position.maxScrollExtent);
+                                      return true;
+                                    }
+                                    controller.jumpTo(controller.offset + value.overscroll);
+                                    return true;
+                                  },
+                                  child: ListView(
+                                      children: loanList(loans),
+                                      controller: _loanScrollCtrl
+                                  )
+                                );
+                              })),
+                      Text("Reviews:", style: TextStyle(fontSize: 20)),
+                      Container(
+                          height: 280,
+                          padding: EdgeInsets.only(left: 4, right: 4),
+                          child: FutureBuilder(
+                              // Builds review cards when request is completed
+                              future: futureReviewCards,
+                              builder: (context, builder) {
+                                return NotificationListener<OverscrollNotification>(
+                                      onNotification: (OverscrollNotification value) {
+                                        if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
+                                          if (controller.offset != 0) controller.jumpTo(0);
+                                          return true;
+                                        }
+                                        if (controller.offset + value.overscroll >= controller.position.maxScrollExtent) {
+                                          if (controller.offset != controller.position.maxScrollExtent) controller.jumpTo(controller.position.maxScrollExtent);
+                                          return true;
+                                        }
+                                        controller.jumpTo(controller.offset + value.overscroll);
+                                        return true;
+                                      },
+                                      child: ListView(
+                                          children: reviewCards,
+                                          controller: _reviewScrollCtrl
+                                      )
+                                  );
+                              })),
+                      Center(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                        title: Text("Delete account"),
+                                        content: Text("Are you sure you want to delete your account? This action can not be reverted."),
+                                        actions: <Widget>[
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                                },
+                                              child: Text("Cancel")),
+                                          TextButton(
+                                              onPressed: () {
+                                                FirebaseAuth.instance.currentUser!.delete();
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                                                },
+                                              child: Text("Delete"))
+                                        ]);
+                                  });
+                              },
+                            child: Text("Delete account"),
+                          ))
           ]));
     }
   }
