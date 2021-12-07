@@ -42,7 +42,7 @@ class _BookCardState extends State<BookCard> {
                         padding: EdgeInsets.fromLTRB(5, 2, 0, 2),
                         child: Container(
                             child: Row(children: [
-                              Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 90),
+                              Image(image: NetworkImage(widget.imageURL), height: 90),
                               Padding(
                                 padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
                                 child: Column(
