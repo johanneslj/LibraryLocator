@@ -25,8 +25,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   String currentRating = "";
 
   TextEditingController reviewTextController = TextEditingController();
-  late GoogleMapController _controller;
-  Location _location = Location();
 
   Widget build(BuildContext context) {
     return FutureBuilder<double>(
