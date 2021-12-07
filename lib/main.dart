@@ -84,7 +84,7 @@ class _AppState extends State<App> {
           }
 
           // While app is initializing
-          return LoadingScreen();
+          return LoadingScreen(fontSize: 30);
         });
   }
 }

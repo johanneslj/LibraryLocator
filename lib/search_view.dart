@@ -7,6 +7,7 @@ import 'package:searchfield/searchfield.dart';
 
 import 'book_details_view.dart';
 import 'database_service.dart';
+import 'loadingScreenView.dart';
 
 class SearchView extends StatefulWidget {
   const SearchView({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class _SearchViewState extends State<SearchView> {
                   future: futureBookCards,
                   builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: Text('Please wait its loading...'));
+                      return Center(child: LoadingScreen(fontSize:30,));
                     } else {
                       if (snapshot.hasError)
                         return Center(child: Text('Error: ${snapshot.error}'));

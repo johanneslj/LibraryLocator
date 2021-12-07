@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
               future: futureBookCards,
               builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: LoadingScreen());
+                  return Center(child: LoadingScreen(fontSize: 30,));
                 } else {
                   if (snapshot.hasError)
                     return Center(child: Text('Error: ${snapshot.error}'));

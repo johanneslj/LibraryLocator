@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
+import 'descriptionTextWidget.dart';
+
 class ReviewCard extends StatefulWidget {
   final double stars;
   final String reviewText;
@@ -40,7 +42,7 @@ class _ReviewCardState extends State<ReviewCard> {
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
-      Flexible(child: Text(widget.reviewText, overflow: TextOverflow.visible)),
+      Flexible(child: DescriptionTextWidget(text: widget.reviewText)),
     ]));
   }
 
