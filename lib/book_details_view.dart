@@ -24,8 +24,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   double averageRating = 0;
   String currentRating = "";
 
-  late GoogleMapController mapController;
-
   TextEditingController reviewTextController = TextEditingController();
   late GoogleMapController _controller;
   Location _location = Location();
@@ -43,7 +41,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               averageRating = snapshot.data!;
             return Scaffold(
               appBar: AppBar(
-                title: Text('Book view'),
+                title: Text("Book Title"),
                 elevation: 0,
               ),
               body: Center(
@@ -73,9 +71,13 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           child: SizedBox(
                             width: 150,
                             height: 150,
-                            child: MapWidget(),
+                            child: MapWidget(selectedLibrary: selectedLibrary,),
                           )),
-                        SelectAndLoanBook(isbn: widget.isbn, closest: ""), //TODO make dropdown work based on library that is closest,
+                        SizedBox(
+                          width: 214,
+                          height: 150,
+                          child: _makeDropdown(),),
+                        //TODO make dropdown work based on library that is closest,
 
                     ]),
                     Padding(
@@ -154,6 +156,79 @@ class _BookDetailsViewState extends State<BookDetailsView> {
 
   String getRating() {
     return currentRating;
+  }
+
+  List<String> availabilityList = <String>[];
+  String selectedLibrary = "Select Library";
+
+  Widget _makeDropdown() {
+    return FutureBuilder<Map<String, String>>(
+        future: dbService.getAvailability(widget.isbn),
+        builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: LoadingScreen(fontSize: 30));
+          } else {
+            if (snapshot.hasError)
+              return Center(child: Text('Error: ${snapshot.error}'));
+            else {
+              availabilityList.clear();
+              snapshot.data!.forEach((key, value) {
+                String formattedString = key + " : Tilgjengelig: " + value;
+                availabilityList.add(formattedString);
+              });
+              availabilityList.sort();
+              return Column(children: [
+                Row(children: [
+                  Container(child: Text(selectedLibrary), width: 160),
+                  PopupMenuButton(
+                      icon: Icon(Icons.arrow_drop_down),
+                      onSelected: (value) {
+                        setState(() {
+                          selectedLibrary = value.toString();
+                        });
+                      },
+                      itemBuilder: (context) => availabilityList.map((library) {
+                        return PopupMenuItem(child: Text(library), value: library, enabled: isAvailable(library));
+                      }).toList()),
+                ]),
+                ElevatedButton(
+                    child: Text("Loan book"),
+                    onPressed: !canLoan(selectedLibrary)
+                        ? null
+                        : () => {
+                      dbService.loanBook(widget.isbn, selectedLibrary),
+                      selectedLibrary = "Select Library",
+                      setState(() {}),
+                    }),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,);
+            }
+          }
+        });
+  }
+
+  bool canLoan(String library) {
+    bool canLoan = false;
+    if (!library.contains("Select Library")) {
+      if (!library.split("Tilgjengelig: ")[1].contains("0")) {
+        canLoan = true;
+      }
+    }
+    return canLoan;
+  }
+
+  bool isAvailable(String library) {
+    bool isAvailable = false;
+
+    if (!library.split("Tilgjengelig: ")[1].contains("0")) {
+      isAvailable = true;
+    }
+
+    return isAvailable;
+  }
+
+  String getLibrary() {
+    return selectedLibrary;
   }
 
   void initState() {
