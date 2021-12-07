@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:library_locator/providers/library_provider.dart';
 
 import 'database_service.dart';
+import 'loadingScreenView.dart';
 
 class SelectAndLoanBook extends StatefulWidget {
   final String isbn;
@@ -26,7 +27,7 @@ class _SelectAndLoanBookState extends State<SelectAndLoanBook> {
         future: dbService.getAvailability(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Text('Please wait its loading...'));
+            return Center(child: LoadingScreen(fontSize:30));
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
