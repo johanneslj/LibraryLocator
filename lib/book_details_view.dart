@@ -30,17 +30,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   late GoogleMapController _controller;
   Location _location = Location();
 
-  void _onMapCreated(GoogleMapController _cntlr) {
-    _controller = _cntlr;
-    _location.onLocationChanged.listen((l) {
-      _controller.animateCamera(
-        CameraUpdate.newCameraPosition(
-          CameraPosition(target: LatLng(l.latitude!, l.longitude!), zoom: 15),
-        ),
-      );
-    });
-  }
-
   Widget build(BuildContext context) {
     return FutureBuilder<double>(
         future: dbService.getAverageRating(widget.isbn),
