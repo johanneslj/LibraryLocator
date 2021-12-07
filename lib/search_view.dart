@@ -34,23 +34,25 @@ class _SearchViewState extends State<SearchView> {
           actions: _buildActions(),
         ),
         body: Column(children: [
-          Container(
-              height: 255,
-              padding: EdgeInsets.only(left: 4, right: 4),
-              child: FutureBuilder(
+          Expanded(
+            child: Container(
+                height: 255,
+                padding: EdgeInsets.only(left: 4, right: 4),
+                child: FutureBuilder(
                   // Displays books when done
-                  future: futureBookCards,
-                  builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: LoadingScreen(fontSize:30,));
-                    } else {
-                      if (snapshot.hasError)
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      else
-                        bookCards = snapshot.data!;
-                      return makeListView(bookCards);
-                    }
-                  })),
+                    future: futureBookCards,
+                    builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: LoadingScreen(fontSize:30,));
+                      } else {
+                        if (snapshot.hasError)
+                          return Center(child: Text('Error: ${snapshot.error}'));
+                        else
+                          bookCards = snapshot.data!;
+                        return makeListView(bookCards);
+                      }
+                    })),
+          ),
         ]));
   }
 
@@ -61,7 +63,7 @@ class _SearchViewState extends State<SearchView> {
           card,
           if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
           // then don't add a divider at the bottom.
-            Divider(),
+            Divider(color: Colors.white54),
         ]),
       ],
     );

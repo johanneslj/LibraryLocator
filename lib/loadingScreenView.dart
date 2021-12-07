@@ -13,13 +13,14 @@ class LoadingScreen extends StatefulWidget {
 class _LoadingScreenState extends State<LoadingScreen>{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
+    return Container(
+      child: Center(
           child: Column(children: [
         Text(
           "Please wait, it's loading...",
           style: TextStyle(fontSize: widget.fontSize, color: Colors.black),
           textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
         ),
         CircularProgressIndicator(color: Colors.blue)
       ],

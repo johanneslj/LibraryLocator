@@ -66,6 +66,7 @@ class _AppState extends State<App> {
               theme: ThemeData(
                 brightness: Brightness.dark,
                 primarySwatch: Colors.amber,
+                primaryTextTheme: Typography.whiteCupertino,
                 textButtonTheme: TextButtonThemeData(
                     style: TextButton.styleFrom(
                         primary: Colors.white)

@@ -34,40 +34,41 @@ class _BookCardState extends State<BookCard> {
               onTap: () {
                 pushToDetails(widget.isbn);
               },
-              child: Expanded(
-                child: Container(
-                  color: Colors.white38,
-                  child: Padding(
-                      padding: EdgeInsets.fromLTRB(5, 10, 0, 0),
-                      child: Container(
-                          child: Row(children: [
-                        Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 90),
-                        Padding(
-                          padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                          child: Column(
-                            children: [
-                              Text(widget.title, textAlign: TextAlign.left, style: TextStyle(fontSize: 22, color: Colors.black),),
-                              Text(widget.author, overflow: TextOverflow.visible, style: TextStyle(fontSize: 22, color: Colors.black),),
-                              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                                Text("(" + averageRating.toString().substring(0, 3) + ")", style: TextStyle(fontSize: 16, color: Colors.black),),
-                                RatingBarIndicator(
-                                  rating: averageRating,
-                                  itemBuilder: (context, index) => Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  itemCount: 5,
-                                  itemSize: 20,
+              child: Row(
+                children: [
+                  Expanded(
+                  child: Container(
+                    child: Padding(
+                        padding: EdgeInsets.fromLTRB(5, 2, 0, 2),
+                        child: Container(
+                            child: Row(children: [
+                              Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 90),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                                child: Column(
+                                  children: [
+                                    Text(widget.title, textAlign: TextAlign.left, style: TextStyle(fontSize: 22)),
+                                    Text(widget.author, overflow: TextOverflow.visible, style: TextStyle(fontSize: 22)),
+                                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                      Text("(" + averageRating.toString().substring(0, 3) + ")", style: TextStyle(fontSize: 16)),
+                                      RatingBarIndicator(
+                                        rating: averageRating,
+                                        itemBuilder: (context, index) => Icon(
+                                          Icons.star,
+                                          color: Colors.amber,
+                                        ),
+                                        itemCount: 5,
+                                        itemSize: 20,
+                                      ),
+                                    ]),
+                                  ],
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                 ),
-                              ]),
-                            ],
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-
-                          ),
-                        ),
-                      ]))),
-                ),
+                              ),
+                            ]))),
+                  ),
+                )],
               ),
             );
           }
