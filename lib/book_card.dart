@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'book_details_view.dart';
+import 'loadingScreenView.dart';
 
 class BookCard extends StatefulWidget {
   final String isbn;
@@ -24,7 +25,7 @@ class _BookCardState extends State<BookCard> {
         future: widget.stars,
         builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Text(""));
+            return Center(child: LoadingScreen(fontSize: 30));
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
