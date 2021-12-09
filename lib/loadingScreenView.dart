@@ -18,11 +18,15 @@ class _LoadingScreenState extends State<LoadingScreen>{
           child: Column(children: [
         Text(
           "Please wait, it's loading...",
-          style: TextStyle(fontSize: widget.fontSize, color: Colors.black),
+          style: TextStyle(fontSize: widget.fontSize),
           textAlign: TextAlign.center,
           textDirection: TextDirection.ltr,
         ),
-        CircularProgressIndicator(color: Colors.blue)
+        Padding(
+          padding: EdgeInsets.only(top: 10),
+          child:CircularProgressIndicator(color: Colors.blue)
+        )
+
       ],
           mainAxisAlignment: MainAxisAlignment.center,)),
     );
