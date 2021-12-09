@@ -6,7 +6,7 @@
         android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="library_locator"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.google.android.geo.API_KEY"
        android:value="AIzaSyA2rWqHZfQcd-6V9c_bYpZeAkrfSzTCn7U"/>
         <activity

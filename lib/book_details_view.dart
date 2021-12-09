@@ -1,14 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:library_locator/review_list.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
 
-import 'bottom_navigation_bar_widget.dart';
 import 'google_map_widget.dart';
 import 'loadingScreenView.dart';
-import 'select_and_loan_book.dart';
 import 'database_service.dart';
 
 class BookDetailsView extends StatefulWidget {
@@ -26,12 +24,17 @@ class _BookDetailsViewState extends State<BookDetailsView> {
 
   TextEditingController reviewTextController = TextEditingController();
 
+  ScrollController _scrollController = new ScrollController();
+
   Widget build(BuildContext context) {
     return FutureBuilder<double>(
         future: dbService.getAverageRating(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: LoadingScreen(fontSize: 30,));
+            return Center(
+                child: LoadingScreen(
+              fontSize: 30,
+            ));
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -39,7 +42,8 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               averageRating = snapshot.data!;
             return Scaffold(
               appBar: AppBar(
-                title: Text("Book Title"),
+                title: InkWell(child: Text("Book Title"),
+                onTap: _scrollToTop,),
                 elevation: 0,
               ),
               body: Center(
@@ -69,14 +73,16 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           child: SizedBox(
                             width: 150,
                             height: 150,
-                            child: MapWidget(selectedLibrary: selectedLibrary,),
+                            child: MapWidget(
+                              selectedLibrary: selectedLibrary,
+                            ),
                           )),
-                        SizedBox(
-                          width: 214,
-                          height: 150,
-                          child: _makeDropdown(),),
-                        //TODO make dropdown work based on library that is closest,
-
+                      SizedBox(
+                        width: 214,
+                        height: 150,
+                        child: _makeDropdown(),
+                      ),
+                      //TODO make dropdown work based on library that is closest,
                     ]),
                     Padding(
                         padding: EdgeInsets.all(10),
@@ -85,68 +91,85 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           InkWell(
                               child: Container(width: 30, height: 30, child: Icon(Icons.add, color: Colors.blue)),
                               onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Add Review'),
-                                        content: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(0),
-                                            child: Form(
-                                              child: Column(
-                                                children: [
-                                                  RatingBar.builder(
-                                                    initialRating: 3,
-                                                    minRating: 0,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    itemCount: 5,
-                                                    itemBuilder: (context, _) => Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
+                                if (FirebaseAuth.instance.currentUser != null) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: Text('Add Review'),
+                                          content: Container(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(0),
+                                              child: Form(
+                                                child: Column(
+                                                  children: [
+                                                    RatingBar.builder(
+                                                      initialRating: 3,
+                                                      minRating: 0,
+                                                      direction: Axis.horizontal,
+                                                      allowHalfRating: true,
+                                                      itemCount: 5,
+                                                      itemBuilder: (context, _) => Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
+                                                      ),
+                                                      onRatingUpdate: (rating) {
+                                                        setRating(rating.toString());
+                                                      },
                                                     ),
-                                                    onRatingUpdate: (rating) {
-                                                      setRating(rating.toString());
-                                                    },
-                                                  ),
-                                                  TextField(
-                                                    keyboardType: TextInputType.multiline,
-                                                    controller: reviewTextController,
-                                                    maxLines: 6,
-                                                    decoration: InputDecoration(
-                                                      labelText: 'Review',
+                                                    TextField(
+                                                      keyboardType: TextInputType.multiline,
+                                                      controller: reviewTextController,
+                                                      maxLines: 6,
+                                                      decoration: InputDecoration(
+                                                        labelText: 'Review',
+                                                      ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
+                                            width: 700,
+                                            height: 250,
                                           ),
-                                          width: 700,
-                                          height: 250,
-                                        ),
-                                        actions: [
-                                          ElevatedButton(
-                                              child: Text("Submit"),
-                                              onPressed: () {
-                                                print(getRating());
-                                                dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text);
-                                                Navigator.pop(context);
-                                                setRating("3");
-                                              })
-                                        ],
-                                      );
-                                    });
+                                          actions: [
+                                            ElevatedButton(
+                                                child: Text("Submit"),
+                                                onPressed: () {
+                                                  print(getRating());
+                                                  dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text);
+                                                  Navigator.pop(context);
+                                                  setRating("3");
+                                                })
+                                          ],
+                                        );
+                                      });
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "You need to be logged in to add a review",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.BOTTOM,
+                                      fontSize: 16.0);
+                                }
                               }),
                         ])),
                     ReviewList(isbn: widget.isbn),
                   ],
+                  controller: _scrollController,
                 ),
               ),
             );
           }
         });
+
+
   }
+
+  void _scrollToTop() {
+    _scrollController.animateTo(0,
+        duration: Duration(milliseconds: 100), curve: Curves.linear);
+  }
+
 
   void setRating(String rating) {
     currentRating = rating;
@@ -175,31 +198,33 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                 availabilityList.add(formattedString);
               });
               availabilityList.sort();
-              return Column(children: [
-                Row(children: [
-                  Container(child: Text(selectedLibrary), width: 160),
-                  PopupMenuButton(
-                      icon: Icon(Icons.arrow_drop_down),
-                      onSelected: (value) {
-                        setState(() {
-                          selectedLibrary = value.toString();
-                        });
-                      },
-                      itemBuilder: (context) => availabilityList.map((library) {
-                        return PopupMenuItem(child: Text(library), value: library, enabled: isAvailable(library));
-                      }).toList()),
-                ]),
-                ElevatedButton(
-                    child: Text("Loan book"),
-                    onPressed: !canLoan(selectedLibrary)
-                        ? null
-                        : () => {
-                      dbService.loanBook(widget.isbn, selectedLibrary),
-                      selectedLibrary = "Select Library",
-                      setState(() {}),
-                    }),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,);
+              return Column(
+                children: [
+                  Row(children: [
+                    Container(child: Text(selectedLibrary), width: 160),
+                    PopupMenuButton(
+                        icon: Icon(Icons.arrow_drop_down),
+                        onSelected: (value) {
+                          setState(() {
+                            selectedLibrary = value.toString();
+                          });
+                        },
+                        itemBuilder: (context) => availabilityList.map((library) {
+                              return PopupMenuItem(child: Text(library), value: library, enabled: isAvailable(library));
+                            }).toList()),
+                  ]),
+                  ElevatedButton(
+                      child: Text("Loan book"),
+                      onPressed: !canLoan(selectedLibrary)
+                          ? null
+                          : () => {
+                                dbService.loanBook(widget.isbn, selectedLibrary),
+                                selectedLibrary = "Select Library",
+                                setState(() {}),
+                              }),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              );
             }
           }
         });
