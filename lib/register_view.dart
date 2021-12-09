@@ -30,30 +30,23 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         body: Center(
           child: Padding(
-            padding: EdgeInsets.only(left: 30, right: 30),
+            padding: EdgeInsets.only(left: 30, right: 30, top: 30),
             child: Form(
                 key: _formKey,
                 child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      SizedBox(height: 35),
-                      Text("Sign Up",
-                          style: TextStyle(
-                            fontSize: 24,
-                          )),
-                      SizedBox(height: 30),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Email",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Email", style: TextStyle(color: Colors.amber)),
                           TextFormField(
                               // Username text field
                               controller: usernameController,
                               decoration: const InputDecoration(
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide:
-                                        BorderSide(color: Colors.pinkAccent),
+                                        BorderSide(color: Colors.amber),
                                   ),
                                   border: UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.grey),
@@ -71,14 +64,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text("Password",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                              style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             // Password text field
                             controller: passwordController,
                             decoration: const InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.pinkAccent),
+                                    BorderSide(color: Colors.amber),
                               ),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -99,14 +92,14 @@ class _RegisterPageState extends State<RegisterPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text("Confirm Password",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                              style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             // Password confirm text field
                             controller: passwordConfirmController,
                             decoration: const InputDecoration(
                               focusedBorder: UnderlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.pinkAccent),
+                                    BorderSide(color: Colors.amber),
                               ),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
@@ -126,9 +119,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         padding: const EdgeInsets.symmetric(vertical: 16.0),
                         child: Column(children: <Widget>[
                           Row(children: <Widget>[
-                            ElevatedButton(
+                            Expanded(child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.pinkAccent,
+                                  primary: Colors.amber,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   fixedSize: const Size(330, 20),
@@ -136,30 +129,31 @@ class _RegisterPageState extends State<RegisterPage> {
                                 onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
                                     try {
-                                    await FirebaseAuth.instance.createUserWithEmailAndPassword(email:usernameController.text,password:passwordController.text);
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => HomePage()),
-                                    );
+                                      await FirebaseAuth.instance.createUserWithEmailAndPassword(email:usernameController.text,password:passwordController.text);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomePage()),
+                                      );
                                     } on FirebaseAuthException catch(e) {
                                       print(e);
                                       String msg = "";
                                       if (e.code == 'email-already-in-use') {
                                         msg = "User already exists";
                                       }
-                                        Fluttertoast.showToast(
-                                        msg: msg,
-                                        toastLength: Toast.LENGTH_LONG,
-                                        gravity: ToastGravity.BOTTOM,
-                                        backgroundColor: Colors.pinkAccent,
-                                        textColor: Colors.white,
-                                        fontSize: 16.0);
+                                      Fluttertoast.showToast(
+                                          msg: msg,
+                                          toastLength: Toast.LENGTH_LONG,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: Colors.amber,
+                                          textColor: Colors.white,
+                                          fontSize: 16.0);
 
                                     }
                                   }
                                 },
-                                child: const Text('Continue'))
+                                child: const Text('Continue')))
+
                           ]),
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -174,10 +168,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                                 (LoginPage())),
                                       );
                                     },
-                                    child: const Text('Sign In')),
+                                    child: const Text('Sign In', style: TextStyle(color: Colors.amberAccent))),
                               ]),
                         ]),
-                      )
+                      ),
                     ])),
           ),
         ));

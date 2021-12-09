@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:library_locator/forgot_password.dart';
 import 'package:library_locator/register_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: Text("Log In"),
+          title: Text("Sign In"),
         ),
         body: Center(
           child: Padding(
@@ -39,19 +40,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text("Sign In",
-                              style: TextStyle(
-                                fontSize: 24,
-                              )),
-                        ],
-                      ),
-                      SizedBox(height: 35),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Email"),
+                          Text("Email", style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             validator: (val) => val!.isEmpty || !val.contains("@")
                                 ? "Enter a valid email"
@@ -71,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Password"),
+                          Text("Password", style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             // Password text field
                             controller: passwordController,
@@ -147,11 +139,11 @@ class _LoginPageState extends State<LoginPage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    (RegisterPage())),
+                                                    (ForgotPasswordPage())),
                                           );
                                         },
                                         child:
-                                            const Text('Forgot Password?')),
+                                            const Text('Forgot Password?', style: TextStyle(color: Colors.amberAccent))),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -161,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     (RegisterPage())),
                                           );
                                         },
-                                        child: const Text('Sign up')),
+                                        child: const Text('Sign up', style: TextStyle(color: Colors.amberAccent))),
                                   ]),
                             ]),
                           ))
