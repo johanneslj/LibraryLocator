@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:library_locator/forgot_password.dart';
 import 'package:library_locator/register_view.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'home.dart';
@@ -29,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     return Scaffold(
         appBar: AppBar(
-          title: Text("Log In"),
+          title: Text("Sign In"),
         ),
         body: Center(
           child: Padding(
@@ -39,24 +40,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text("Sign In",
-                              style: TextStyle(
-                                fontSize: 24,
-                              )),
-                        ],
-                      ),
-                      Row(
-                        children: <Widget>[
-                          Text("if user is logged in use biometrics"),
-                        ],
-                      ),
-                      SizedBox(height: 35),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Email"),
+                          Text("Email", style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             validator: (val) => val!.isEmpty || !val.contains("@")
                                 ? "Enter a valid email"
@@ -76,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Password"),
+                          Text("Password", style: TextStyle(color: Colors.amber)),
                           TextFormField(
                             // Password text field
                             controller: passwordController,
@@ -98,24 +85,23 @@ class _LoginPageState extends State<LoginPage> {
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    ElevatedButton(
+                                    Expanded(child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 20, vertical: 10),
-                                          fixedSize: const Size(330, 20),
                                         ),
                                         onPressed: () async {
                                           if (_formKey.currentState!
                                               .validate()) {
                                             try {
                                               UserCredential userCredential =
-                                                  await FirebaseAuth.instance
-                                                      .signInWithEmailAndPassword(
-                                                          email: emailController
-                                                              .text,
-                                                          password:
-                                                              passwordController
-                                                                  .text);
+                                              await FirebaseAuth.instance
+                                                  .signInWithEmailAndPassword(
+                                                  email: emailController
+                                                      .text,
+                                                  password:
+                                                  passwordController
+                                                      .text);
 
                                               print(userCredential.toString());
                                               Navigator.push(
@@ -124,23 +110,24 @@ class _LoginPageState extends State<LoginPage> {
                                                       builder: (context) =>
                                                           App()));
                                             } on FirebaseAuthException catch (e) {
-                                             print(e.toString());
-                                             String msg = "";
+                                              print(e.toString());
+                                              String msg = "";
                                               if (e.code == 'user-not-found') {
                                                 msg = "User not found";
                                               } else if (e.code ==
                                                   'wrong-password') {
                                                 msg = 'Wrong password';
                                               }
-                                             Fluttertoast.showToast(
-                                                 msg: msg,
-                                                 toastLength: Toast.LENGTH_LONG,
-                                                 gravity: ToastGravity.BOTTOM,
-                                                 fontSize: 16.0);
+                                              Fluttertoast.showToast(
+                                                  msg: msg,
+                                                  toastLength: Toast.LENGTH_LONG,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  fontSize: 16.0);
                                             }
                                           }
                                         },
-                                        child: const Text('Sign In')),
+                                        child: const Text('Sign In')))
+                                    ,
                                   ]),
                               Row(
                                   mainAxisAlignment:
@@ -152,11 +139,11 @@ class _LoginPageState extends State<LoginPage> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    (RegisterPage())),
+                                                    (ForgotPasswordPage())),
                                           );
                                         },
                                         child:
-                                            const Text('Forgot Password?')),
+                                            const Text('Forgot Password?', style: TextStyle(color: Colors.amberAccent))),
                                     TextButton(
                                         onPressed: () {
                                           Navigator.push(
@@ -166,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     (RegisterPage())),
                                           );
                                         },
-                                        child: const Text('Sign up')),
+                                        child: const Text('Sign up', style: TextStyle(color: Colors.amberAccent))),
                                   ]),
                             ]),
                           ))
