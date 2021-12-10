@@ -5,9 +5,14 @@ import 'package:library_locator/loan_model.dart';
 import 'package:library_locator/review_card.dart';
 import 'book_card.dart';
 import 'loan_model.dart';
+import 'package:dio/dio.dart';
+
 
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
+  final Apiurl = 'http://localhost:8080';
+  final Dio dio = new Dio();
+
   List<Widget> reviewList = <Widget>[];
 
   /// Get all the reviews for a book on the given isbn number
@@ -27,6 +32,34 @@ class DatabaseService {
     return reviewList;
   }
 
+  Future<List<Widget>> getBooks() async {
+    var response = await dio.get(Apiurl + "/getAllBooks");
+
+    List<Widget> bookList = <BookCard>[];
+
+
+    final books = firebaseDatabase.child("books/");
+    Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+
+
+    data = new Map<dynamic, dynamic>();
+    data = response.data;
+
+    data.forEach((key, value) {
+      Future<double> averageRating = getAverageRating(key);
+
+      final hei = value;
+      bookList.add(new BookCard(
+        stars: averageRating,
+        imageURL: "https://bit.ly/3DxOC5k",
+        author: "Hans",
+        title: "How to ski",
+        isbn: key,));
+    });
+
+    return bookList;
+
+  }
   /// Uses the ISBN to find the availability of the book
   /// at the different libraries
   Future<Map<String, String>> getAvailability(String isbn) async {
