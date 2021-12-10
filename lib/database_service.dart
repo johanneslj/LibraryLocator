@@ -32,67 +32,49 @@ class DatabaseService {
     });
     return reviewList;
   }
-
+//Gets all books from the custom backend server.
   Future<List<Widget>> getBooks() async {
     var response = await dio.get(Apiurl + "/getAllBooks");
 
     List<Widget> bookList = <BookCard>[];
 
 
-    final books = firebaseDatabase.child("books/");
-    Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-
-
-    data = new Map<dynamic, dynamic>();
-    data = response.data;
-
-    data.forEach((key, value) {
+    response.data.forEach((key, value) {
       Future<double> averageRating = getAverageRating(key);
       String imageURL ="";
       String title ="";
       String author ="";
+      String summary ="";
 
-      value.forEach((key, value) {
+      value.forEach((key, value) async {
         if(key == "image"){
-
           if(value.toString().isEmpty){
             imageURL = defaultImage;
           }
           else{
-            try{
-              Image image = Image(image: NetworkImage(value.toString()), height: 90);
-              if(image.width! > 10){
-                imageURL = value.toString();
-              }
-              else{
-                imageURL = defaultImage;
-              }
-            }
-            catch(Exception){
-              imageURL = defaultImage;
-            }
-
+             imageURL = value.toString();
           }
-
-
-
-
         }
         if(key == "title"){
           title = value.toString();
         }
         if(key == "author"){
-          author = value.toString();
+
+          author =  value.toString();
+        }
+        if(key == "summary"){
+
+          summary =  value.toString();
         }
       });
-
 
       bookList.add(new BookCard(
         stars: averageRating,
         imageURL: imageURL,
         author: author,
         title: title,
-        isbn: key,));
+        isbn: key,
+        summary:summary));
     });
 
     return bookList;
@@ -211,28 +193,28 @@ class DatabaseService {
     userLoan.set({"from": fromString, "to": toString}).catchError((error) => print(error));
   }
 
-  Future<List<Widget>> getAllBooks() async {
-    List<Widget> bookList = <BookCard>[];
-
-    final books = firebaseDatabase.child("books/");
-    Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-
-    await books.get().then((DataSnapshot snapshot) {
-      data = new Map<dynamic, dynamic>.from(snapshot.value);
-      data.forEach((key, value) {
-
-        Future<double> averageRating = getAverageRating(key);
-
-        bookList.add(new BookCard(
-          stars: averageRating,
-          imageURL: "https://bit.ly/3DxOC5k",
-          author: "Hans",
-          title: "How to ski",
-          isbn: key,));
-      });
-    });
-
-    return bookList;
-  }
+  //Future<List<Widget>> getAllBooks() async {
+    // List<Widget> bookList = <BookCard>[];
+    //
+    // final books = firebaseDatabase.child("books/");
+    // Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+    //
+    // await books.get().then((DataSnapshot snapshot) {
+    //   data = new Map<dynamic, dynamic>.from(snapshot.value);
+    //   data.forEach((key, value) {
+    //
+    //     Future<double> averageRating = getAverageRating(key);
+    //
+    //     bookList.add(new BookCard(
+    //       stars: averageRating,
+    //       imageURL: "https://bit.ly/3DxOC5k",
+    //       author: "Hans",
+    //       title: "How to ski",
+    //       isbn: key,));
+    //   });
+    // });
+    //
+    // return bookList;
+ // }
 
 }

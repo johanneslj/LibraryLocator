@@ -10,8 +10,16 @@ import 'loadingScreenView.dart';
 import 'database_service.dart';
 
 class BookDetailsView extends StatefulWidget {
-  BookDetailsView({Key? key, required this.isbn}) : super(key: key);
+  BookDetailsView({Key? key, required this.isbn, required this.title,required this.author, required this.imageURL,required this.summary}) : super(key: key);
   final String isbn;
+  final String title;
+  final String author;
+  final String imageURL;
+  final String summary;
+
+
+
+
 
   @override
   _BookDetailsViewState createState() => _BookDetailsViewState();
@@ -42,18 +50,19 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               averageRating = snapshot.data!;
             return Scaffold(
               appBar: AppBar(
-                title: InkWell(child: Text("Book Title"),
+                title: InkWell(child: Text(widget.title),
                 onTap: _scrollToTop,),
                 elevation: 0,
               ),
               body: Center(
                 child: ListView(
                   children: [
-                    Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 300),
+                    Image(image: NetworkImage(widget.imageURL), height: 300),
                     Align(
                         alignment: Alignment.topCenter,
                         child: Column(children: [
-                          Text("Title of Book", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                          Text(widget.title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30)),
+                          Text(widget.author, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                             Text("(" + averageRating.toString().substring(0, 3) + ")"),
                             RatingBarIndicator(
@@ -233,7 +242,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   bool canLoan(String library) {
     bool canLoan = false;
     if (!library.contains("Select Library")) {
-      if (!library.split("Tilgjengelig: ")[1].contains("0")) {
+      if (!library.split("Tilgjengelig")[1].contains(":0")) {
         canLoan = true;
       }
     }

@@ -10,8 +10,10 @@ class BookCard extends StatefulWidget {
   final Future<double> stars;
   final String title;
   final String author;
+  final String summary;
 
-  const BookCard({Key? key, required this.isbn, required this.imageURL, required this.stars, required this.title, required this.author})
+
+  const BookCard({Key? key, required this.isbn, required this.imageURL, required this.stars, required this.title, required this.author,required this.summary})
       : super(key: key);
 
   @override
@@ -33,7 +35,7 @@ class _BookCardState extends State<BookCard> {
               averageRating = snapshot.data!;
             return InkWell(
               onTap: () {
-                pushToDetails(widget.isbn);
+                pushToDetails(widget.isbn,widget.title,widget.author,widget.imageURL,widget.summary);
               },
               child: Row(
                 children: [
@@ -76,8 +78,8 @@ class _BookCardState extends State<BookCard> {
         });
   }
 
-  void pushToDetails(String isbn) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: isbn)));
+  void pushToDetails(String isbn,String title,String author,String imageURL,String summary) {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: isbn,title:title,author:author,imageURL:imageURL,summary:summary)));
   }
 
   void initState() {
