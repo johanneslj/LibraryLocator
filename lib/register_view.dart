@@ -45,19 +45,14 @@ class _RegisterPageState extends State<RegisterPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Email",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Email"),
+
                           TextFormField(
                               // Username text field
                               controller: usernameController,
                               decoration: const InputDecoration(
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide:
-                                        BorderSide(color: Colors.pinkAccent),
-                                  ),
-                                  border: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: Colors.grey),
-                                  ),
+                                  focusedBorder: UnderlineInputBorder(),
+                                  border: UnderlineInputBorder(),
                                   hintText: 'Username...'),
                               validator: (String? value) {
                                 return (!usernameRegex.hasMatch(value!)
@@ -70,16 +65,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Password",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Password"),
                           TextFormField(
                             // Password text field
                             controller: passwordController,
                             decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.pinkAccent),
-                              ),
+                              focusedBorder: UnderlineInputBorder(),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
@@ -98,16 +89,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text("Confirm Password",
-                              style: TextStyle(color: Colors.pinkAccent)),
+                          Text("Confirm Password"),
                           TextFormField(
                             // Password confirm text field
                             controller: passwordConfirmController,
                             decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.pinkAccent),
-                              ),
+                              focusedBorder: UnderlineInputBorder(),
                               border: UnderlineInputBorder(
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
@@ -128,7 +115,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           Row(children: <Widget>[
                             ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  primary: Colors.pinkAccent,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                   fixedSize: const Size(330, 20),
