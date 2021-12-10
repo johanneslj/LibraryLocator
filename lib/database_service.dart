@@ -12,6 +12,7 @@ class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
   final Apiurl = 'http://localhost:8080';
   final Dio dio = new Dio();
+  final defaultImage = "https://bit.ly/3DxOC5k";
 
   List<Widget> reviewList = <Widget>[];
 
@@ -47,13 +48,50 @@ class DatabaseService {
 
     data.forEach((key, value) {
       Future<double> averageRating = getAverageRating(key);
+      String imageURL ="";
+      String title ="";
+      String author ="";
 
-      final hei = value;
+      value.forEach((key, value) {
+        if(key == "image"){
+
+          if(value.toString().isEmpty){
+            imageURL = defaultImage;
+          }
+          else{
+            try{
+              Image image = Image(image: NetworkImage(value.toString()), height: 90);
+              if(image.width! > 10){
+                imageURL = value.toString();
+              }
+              else{
+                imageURL = defaultImage;
+              }
+            }
+            catch(Exception){
+              imageURL = defaultImage;
+            }
+
+          }
+
+
+
+
+        }
+        if(key == "title"){
+          title = value.toString();
+        }
+        if(key == "author"){
+          author = value.toString();
+        }
+      });
+
+
       bookList.add(new BookCard(
         stars: averageRating,
-        imageURL: "https://bit.ly/3DxOC5k",
-        author: "Hans",
-        title: "How to ski",
+        imageURL: imageURL,
+        author: author,
+        title: title,
         isbn: key,));
     });
 
@@ -81,16 +119,17 @@ class DatabaseService {
     double averageRating = 0;
     final reviews = firebaseDatabase.child("books/"+ isbn +"/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-    await reviews.get().then((DataSnapshot snapshot) {
-      data = new Map<dynamic, dynamic>.from(snapshot.value);
-      double totalRating = 0;
-      data.forEach((key, value) {
-        List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
-        double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-        totalRating += reviewStars;
+      await reviews.get().then((DataSnapshot snapshot) {
+          data = new Map<dynamic, dynamic>.from(snapshot.value);
+          double totalRating = 0;
+          data.forEach((key, value) {
+            List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+            double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+            totalRating += reviewStars;
+          });
+          averageRating = totalRating/data.length;
       });
-      averageRating = totalRating/data.length;
-    });
+
 
     return averageRating;
  }

@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Future<List<Widget>> test = DatabaseService().getBooks();
-    Future<List<Widget>> futureBookCards = DatabaseService().getAllBooks();
+    Future<List<Widget>> futureBookCards = DatabaseService().getBooks();
     List<Widget> bookCards = <Widget>[];
 
     futureBookCards.then((books) => bookCards = books);
