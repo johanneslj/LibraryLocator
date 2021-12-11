@@ -50,11 +50,9 @@ class _HomePageState extends State<HomePage> {
         title: Text("Home"),
       ),
         body: Column(children: [
-      Container(
-          height: 255,
-          padding: EdgeInsets.only(left: 4, right: 4),
-          child: FutureBuilder(
-              // Displays books when done
+          Expanded(child:
+          FutureBuilder(
+            // Displays books when done
               future: futureBookCards,
               builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -66,7 +64,8 @@ class _HomePageState extends State<HomePage> {
                     bookCards = snapshot.data!;
                   return makeListView(bookCards);
                 }
-              })),
+              })
+          ),
     ]));
   }
 
