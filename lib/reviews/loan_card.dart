@@ -30,6 +30,7 @@ class LoanCard extends StatefulWidget {
 }
 
 class _LoanCardState extends State<LoanCard> {
+  bool overdue = false;
   final DatabaseService dbService = new DatabaseService();
   Image noImage = Image.asset(
     "assets/book.jpg",
@@ -43,7 +44,10 @@ class _LoanCardState extends State<LoanCard> {
         Expanded(
           child: Container(
             foregroundDecoration: !isDelivered(widget.to)
-                ? null
+                ? !overdue ? null : BoxDecoration(
+                    color:Colors.red,
+                    backgroundBlendMode: BlendMode.overlay,
+                  )
                 : BoxDecoration(
                     color: Colors.grey,
                     backgroundBlendMode: BlendMode.saturation,
@@ -64,7 +68,7 @@ class _LoanCardState extends State<LoanCard> {
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       children: [
-                        Text(widget.title,
+                        Text(isDelivered(widget.to) ? widget.title : !overdue ? widget.title :  "(OVERDUE) " + widget.title,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -92,6 +96,9 @@ class _LoanCardState extends State<LoanCard> {
                     child: isDelivered(widget.to)
                         ? null
                         : ElevatedButton(
+                            style: !overdue ? ElevatedButton.styleFrom(
+                              primary: Colors.amber,) : ElevatedButton.styleFrom(
+                                primary: Colors.red,),
                             child: Text("Deliver"),
                             onPressed: () => {
                               dbService.deliverBook(widget.email, widget.isbn, widget.location),
@@ -114,8 +121,9 @@ class _LoanCardState extends State<LoanCard> {
     bool delivered = false;
 
     if (!to.isAfter(DateTime.now())) {
-      delivered = true;
-      dbService.deliverBook(widget.email, widget.isbn, widget.location);
+      //delivered = true;
+      overdue = true;
+      //dbService.deliverBook(widget.email, widget.isbn, widget.location);
     }
 
     if (widget.delivered) {
