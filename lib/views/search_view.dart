@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'database_service.dart';
+
+import '../services/database_service.dart';
 import 'loadingScreenView.dart';
 
 class SearchView extends StatefulWidget {
@@ -79,6 +81,7 @@ class _SearchViewState extends State<SearchView> {
         hintStyle: TextStyle(color: Colors.white30),
       ),
       style: TextStyle(color: Colors.white, fontSize: 16.0),
+      onChanged: (query) => updateSearchQuery(query),
     );
   }
 

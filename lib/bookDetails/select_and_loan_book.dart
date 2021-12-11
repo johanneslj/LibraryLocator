@@ -4,8 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:library_locator/providers/library_provider.dart';
 
-import 'database_service.dart';
-import 'loadingScreenView.dart';
+import '../services/database_service.dart';
+import '../views/loadingScreenView.dart';
 
 class SelectAndLoanBook extends StatefulWidget {
   final String isbn;

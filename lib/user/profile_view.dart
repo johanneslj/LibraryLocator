@@ -3,11 +3,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:library_locator/database_service.dart';
-import 'package:library_locator/home.dart';
-import 'package:library_locator/login_view.dart';
+import 'package:library_locator/services/database_service.dart';
+import 'package:library_locator/views/home.dart';
+import 'package:library_locator/user/login_view.dart';
 import 'package:library_locator/main.dart';
-import 'package:library_locator/review_card.dart';
+import 'package:library_locator/reviews/review_card.dart';
 
 import 'loan_model.dart';
 

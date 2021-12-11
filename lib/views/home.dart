@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:library_locator/user/profile_view.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+import '../bookDetails/book_details_view.dart';
+import '../services/database_service.dart';
 import 'database_service.dart';
 import 'loadingScreenView.dart';
 
@@ -34,27 +40,19 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Future<List<Widget>> test = DatabaseService().getBooks();
+    Future<List<Widget>> futureBookCards = DatabaseService().getBooks();
     List<Widget> bookCards = <Widget>[];
-    Future<List<Widget>>? futureBookCards;
 
-    if (widget.cache == null || widget.cache!.isEmpty) {
-      futureBookCards = DatabaseService().getBooks();
-      futureBookCards.then((books) => bookCards = books);
-      if(widget.updateCache != null) {
-        widget.updateCache!();
-      }
-    } else {
-      bookCards = widget.cache!;
-    }
+    futureBookCards.then((books) => bookCards = books);
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Center(child: Text("Home")),
+        title: Text("Home"),
       ),
         body: Column(children: [
           Expanded(child:
-            futureBookCards != null ?
           FutureBuilder(
             // Displays books when done
               future: futureBookCards,
@@ -68,9 +66,7 @@ class _HomePageState extends State<HomePage> {
                     bookCards = snapshot.data!;
                   return makeListView(bookCards);
                 }
-              }) :
-                makeListView(bookCards),
-
+              })
           ),
     ]));
   }

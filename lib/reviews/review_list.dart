@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'database_service.dart';
+import '../services/database_service.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'loadingScreenView.dart';
+import '../views/loadingScreenView.dart';
 
 class ReviewList extends StatefulWidget {
   final String isbn;

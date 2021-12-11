@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:library_locator/review_list.dart';
+import 'package:library_locator/reviews/review_list.dart';
 
 import 'google_map_widget.dart';
-import 'loadingScreenView.dart';
-import 'database_service.dart';
+import '../views/loadingScreenView.dart';
+import '../services/database_service.dart';
 
 class BookDetailsView extends StatefulWidget {
   BookDetailsView({Key? key, required this.isbn, required this.title,required this.author, required this.imageURL,required this.summary}) : super(key: key);
