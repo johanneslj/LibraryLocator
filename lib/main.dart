@@ -2,14 +2,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:library_locator/profile_view.dart';
+import 'package:library_locator/user/profile_view.dart';
 import 'package:library_locator/providers/bottom_navigation_provider.dart';
-import 'package:library_locator/search_view.dart';
+import 'package:library_locator/views/search_view.dart';
 
-import 'bottom_navigation_bar_widget.dart';
-import 'home.dart';
-import 'loadingScreenView.dart';
-import 'login_view.dart';
+import 'views/bottom_navigation_bar_widget.dart';
+import 'views/home.dart';
+import 'views/loadingScreenView.dart';
+import 'user/login_view.dart';
 
 class Logger extends ProviderObserver {
   @override

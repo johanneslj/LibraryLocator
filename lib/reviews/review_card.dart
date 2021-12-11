@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import 'descriptionTextWidget.dart';
+import '../bookDetails/descriptionTextWidget.dart';
 
 class ReviewCard extends StatefulWidget {
   final double stars;

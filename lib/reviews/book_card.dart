@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
-import 'book_details_view.dart';
-import 'loadingScreenView.dart';
+import '../bookDetails/book_details_view.dart';
+import '../views/loadingScreenView.dart';
 
 class BookCard extends StatefulWidget {
   final String isbn;

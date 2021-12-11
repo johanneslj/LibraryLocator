@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:library_locator/profile_view.dart';
+import 'package:library_locator/user/profile_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'book_details_view.dart';
-import 'database_service.dart';
+import '../bookDetails/book_details_view.dart';
+import '../services/database_service.dart';
 import 'loadingScreenView.dart';
 
 class HomePage extends StatefulWidget {
