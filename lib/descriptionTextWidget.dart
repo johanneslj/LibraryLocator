@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:library_locator/review_list.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
-
-import 'bottom_navigation_bar_widget.dart';
-import 'google_map_widget.dart';
-import 'loadingScreenView.dart';
-import 'select_and_loan_book.dart';
-import 'database_service.dart';
 
 class DescriptionTextWidget extends StatefulWidget {
   final String text;
