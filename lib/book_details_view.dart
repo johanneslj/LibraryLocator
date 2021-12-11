@@ -30,6 +30,8 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   double averageRating = 0;
   String currentRating = "";
 
+  Image noImage = Image.asset("assets/book.jpg", height: 300);
+
   TextEditingController reviewTextController = TextEditingController();
 
   ScrollController _scrollController = new ScrollController();
@@ -57,7 +59,9 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               body: Center(
                 child: ListView(
                   children: [
-                    Image(image: NetworkImage(widget.imageURL), height: 300),
+                    Image(image: NetworkImage(widget.imageURL), height: 300,
+                          errorBuilder: (BuildContext context, Object e, StackTrace? stackTrace) {
+                          return noImage;}),
                     Align(
                         alignment: Alignment.topCenter,
                         child: Column(children: [
