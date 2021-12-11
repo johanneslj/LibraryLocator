@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'database_service.dart';
 
 import '../services/database_service.dart';
 import 'loadingScreenView.dart';
@@ -38,7 +37,7 @@ class _SearchViewState extends State<SearchView> {
                 height: 255,
                 padding: EdgeInsets.only(left: 4, right: 4),
                 child:
-                (bookCards.isEmpty && widget.cache!.isNotEmpty && !searched)
+                (bookCards.isEmpty && (null != widget.cache) && widget.cache!.isNotEmpty && !searched)
                     ? makeListView(widget.cache!)
                     : FutureBuilder(
                         // Displays books when done
