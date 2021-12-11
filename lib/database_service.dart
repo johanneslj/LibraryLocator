@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
   final Apiurl = 'http://mobilelibraryapi.azurewebsites.net';
+  //final Apiurl = '10.24.94.24';
   final Dio dio = new Dio();
   final defaultImage = "https://bit.ly/3DxOC5k";
 
@@ -32,12 +33,12 @@ class DatabaseService {
     });
     return reviewList;
   }
+
 //Gets all books from the custom backend server.
   Future<List<Widget>> getBooks() async {
     var response = await dio.get(Apiurl + "/getAllBooks");
 
     List<Widget> bookList = <BookCard>[];
-
 
     response.data.forEach((key, value) {
       Future<double> averageRating = getAverageRating(key);
@@ -78,8 +79,54 @@ class DatabaseService {
     });
 
     return bookList;
-
   }
+
+  Future<List<Widget>> search(String query) async {
+    var response = await dio.get(Apiurl + "/search=" + query);
+
+    List<Widget> bookList = <BookCard>[];
+
+    response.data.forEach((key, value) {
+      Future<double> averageRating = getAverageRating(key);
+      String imageURL ="";
+      String title ="";
+      String author ="";
+      String summary ="";
+
+      value.forEach((key, value) async {
+        if(key == "image"){
+          if(value.toString().isEmpty){
+            imageURL = defaultImage;
+          }
+          else{
+            imageURL = value.toString();
+          }
+        }
+        if(key == "title"){
+          title = value.toString();
+        }
+        if(key == "author"){
+
+          author =  value.toString();
+        }
+        if(key == "summary"){
+
+          summary =  value.toString();
+        }
+      });
+
+      bookList.add(new BookCard(
+          stars: averageRating,
+          imageURL: imageURL,
+          author: author,
+          title: title,
+          isbn: key,
+          summary:summary));
+    });
+
+    return bookList;
+  }
+
   /// Uses the ISBN to find the availability of the book
   /// at the different libraries
   Future<Map<String, String>> getAvailability(String isbn) async {
