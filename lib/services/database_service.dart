@@ -8,7 +8,6 @@ import '../reviews/book_card.dart';
 import '../user/loan_model.dart';
 import 'package:dio/dio.dart';
 
-
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
   final Apiurl = 'http://mobilelibraryapi.azurewebsites.net';
@@ -33,54 +32,45 @@ class DatabaseService {
     });
     return reviewList;
   }
+
 //Gets all books from the custom backend server.
   Future<List<Widget>> getBooks() async {
     var response = await dio.get(Apiurl + "/getAllBooks");
 
     List<Widget> bookList = <BookCard>[];
 
-
     response.data.forEach((key, value) {
       Future<double> averageRating = getAverageRating(key);
-      String imageURL ="";
-      String title ="";
-      String author ="";
-      String summary ="";
+      String imageURL = "";
+      String title = "";
+      String author = "";
+      String summary = "";
 
       value.forEach((key, value) async {
-        if(key == "image"){
-          if(value.toString().isEmpty){
+        if (key == "image") {
+          if (value.toString().isEmpty) {
             imageURL = defaultImage;
-          }
-          else{
-             imageURL = value.toString();
+          } else {
+            imageURL = value.toString();
           }
         }
-        if(key == "title"){
+        if (key == "title") {
           title = value.toString();
         }
-        if(key == "author"){
-
-          author =  value.toString();
+        if (key == "author") {
+          author = value.toString();
         }
-        if(key == "summary"){
-
-          summary =  value.toString();
+        if (key == "summary") {
+          summary = value.toString();
         }
       });
 
-      bookList.add(new BookCard(
-        stars: averageRating,
-        imageURL: imageURL,
-        author: author,
-        title: title,
-        isbn: key,
-        summary:summary));
+      bookList.add(new BookCard(stars: averageRating, imageURL: imageURL, author: author, title: title, isbn: key, summary: summary));
     });
 
     return bookList;
-
   }
+
   /// Uses the ISBN to find the availability of the book
   /// at the different libraries
   Future<Map<String, String>> getAvailability(String isbn) async {
@@ -98,24 +88,23 @@ class DatabaseService {
   }
 
   /// Uses ISBN to find the average rating of that book
- Future<double> getAverageRating(String isbn) async {
+  Future<double> getAverageRating(String isbn) async {
     double averageRating = 0;
-    final reviews = firebaseDatabase.child("books/"+ isbn +"/reviews/");
+    final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-      await reviews.get().then((DataSnapshot snapshot) {
-          data = new Map<dynamic, dynamic>.from(snapshot.value);
-          double totalRating = 0;
-          data.forEach((key, value) {
-            List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
-            double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-            totalRating += reviewStars;
-          });
-          averageRating = totalRating/data.length;
+    await reviews.get().then((DataSnapshot snapshot) {
+      data = new Map<dynamic, dynamic>.from(snapshot.value);
+      double totalRating = 0;
+      data.forEach((key, value) {
+        List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+        double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+        totalRating += reviewStars;
       });
-
+      averageRating = totalRating / data.length;
+    });
 
     return averageRating;
- }
+  }
 
   /// Get the loans given by a user
   /// It gets the loan from the database on the users email
@@ -127,12 +116,21 @@ class DatabaseService {
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     Map<dynamic, dynamic> innerData;
 
-    await loans.get().then((DataSnapshot snapshot) {
+     await loans.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
         innerData = new Map<dynamic, dynamic>.from(value);
-        String title = "Placeholder title";// TODO Get title with ISBN from backend here!
-        loanList.add(new LoanCard(imageURL: '', from: createDateFromString(innerData["from"]), to: createDateFromString(innerData["to"]), title: title, email: email,));
+        String title = "Placeholder title"; // TODO Get title with ISBN from backend here!
+        loanList.add(new LoanCard(
+          imageURL: '',
+          from: createDateFromString(innerData["from"]),
+          to: createDateFromString(innerData["to"]),
+          title: title,
+          email: email,
+          isbn: key,
+          delivered: innerData["delivered"],
+          location: innerData["location"],
+        ));
       });
     });
 
@@ -141,8 +139,17 @@ class DatabaseService {
     return loanList;
   }
 
-  void deliverBook(String email) {
+  void deliverBook(String email, String isbn, String location) async {
+    final userLoans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans/" + isbn);
+    DateTime now = DateTime.now();
+    DateTime deliveredDate = new DateTime(now.year, now.month, now.day);
+    String deliveredDateString = "" + deliveredDate.year.toString() + "-" + deliveredDate.month.toString() + "-" + deliveredDate.day.toString();
+    userLoans.update({"delivered": true, "to": deliveredDateString});
 
+    final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + location);
+    int available = 0;
+    await availability.get().then((DataSnapshot dataSnapshot) => {available = dataSnapshot.value});
+    availability.set(available + 1);
   }
 
   DateTime createDateFromString(String dateString) {
@@ -172,8 +179,7 @@ class DatabaseService {
         String reviewText = reviewContent["text"].toString();
         double reviewStars = double.parse(reviewContent["stars"].toString());
 
-        reviewCards.add(new ReviewCard(
-            stars: reviewStars, reviewText: reviewText, username: key));
+        reviewCards.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key));
       });
     });
 
@@ -206,31 +212,31 @@ class DatabaseService {
     DateTime to = new DateTime(now.year, now.month, now.day + 30);
     String fromString = "" + from.year.toString() + "-" + from.month.toString() + "-" + from.day.toString();
     String toString = "" + to.year.toString() + "-" + to.month.toString() + "-" + to.day.toString();
-    userLoan.set({"from": fromString, "to": toString}).catchError((error) => print(error));
+    userLoan.set({"from": fromString, "to": toString, "delivered": false, "location": selectedLibrary}).catchError((error) => print(error));
   }
 
-  //Future<List<Widget>> getAllBooks() async {
-    // List<Widget> bookList = <BookCard>[];
-    //
-    // final books = firebaseDatabase.child("books/");
-    // Map<dynamic, dynamic> data = <dynamic, dynamic>{};
-    //
-    // await books.get().then((DataSnapshot snapshot) {
-    //   data = new Map<dynamic, dynamic>.from(snapshot.value);
-    //   data.forEach((key, value) {
-    //
-    //     Future<double> averageRating = getAverageRating(key);
-    //
-    //     bookList.add(new BookCard(
-    //       stars: averageRating,
-    //       imageURL: "https://bit.ly/3DxOC5k",
-    //       author: "Hans",
-    //       title: "How to ski",
-    //       isbn: key,));
-    //   });
-    // });
-    //
-    // return bookList;
- // }
+//Future<List<Widget>> getAllBooks() async {
+// List<Widget> bookList = <BookCard>[];
+//
+// final books = firebaseDatabase.child("books/");
+// Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+//
+// await books.get().then((DataSnapshot snapshot) {
+//   data = new Map<dynamic, dynamic>.from(snapshot.value);
+//   data.forEach((key, value) {
+//
+//     Future<double> averageRating = getAverageRating(key);
+//
+//     bookList.add(new BookCard(
+//       stars: averageRating,
+//       imageURL: "https://bit.ly/3DxOC5k",
+//       author: "Hans",
+//       title: "How to ski",
+//       isbn: key,));
+//   });
+// });
+//
+// return bookList;
+// }
 
 }

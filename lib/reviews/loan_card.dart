@@ -1,14 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:library_locator/services/database_service.dart';
 
+import '../main.dart';
+
 class LoanCard extends StatefulWidget {
   final String imageURL;
   final String title;
   final DateTime to;
   final DateTime from;
   final String email;
+  final String isbn;
+  final bool delivered;
+  final String location;
 
-  const LoanCard({Key? key, required this.imageURL, required this.title, required this.to, required this.from, required this.email}) : super(key: key);
+  const LoanCard(
+      {Key? key,
+      required this.imageURL,
+      required this.title,
+      required this.to,
+      required this.from,
+      required this.email,
+      required this.isbn,
+      required this.delivered,
+      required this.location})
+      : super(key: key);
 
   @override
   _LoanCardState createState() => _LoanCardState();
@@ -16,7 +31,6 @@ class LoanCard extends StatefulWidget {
 
 class _LoanCardState extends State<LoanCard> {
   final DatabaseService dbService = new DatabaseService();
-
   Image noImage = Image.asset(
     "assets/book.jpg",
     height: 90,
@@ -24,8 +38,6 @@ class _LoanCardState extends State<LoanCard> {
   );
 
   Widget build(BuildContext context) {
-
-
     return Row(
       children: [
         Expanded(
@@ -76,12 +88,21 @@ class _LoanCardState extends State<LoanCard> {
                       mainAxisAlignment: MainAxisAlignment.start,
                     ),
                   )),
-                  ElevatedButton(
-                    onPressed: () {
-                      dbService.deliverBook(widget.email);
-                    },
-                    child: null,
-                  ),
+                  Container(
+                    child: isDelivered(widget.to)
+                        ? null
+                        : ElevatedButton(
+                            child: Text("Deliver"),
+                            onPressed: () => {
+                              dbService.deliverBook(widget.email, widget.isbn, widget.location),
+                              Navigator.pop(context),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => App()),
+                              )
+                            },
+                          ),
+                  )
                 ]))),
           ),
         )
@@ -93,6 +114,11 @@ class _LoanCardState extends State<LoanCard> {
     bool delivered = false;
 
     if (!to.isAfter(DateTime.now())) {
+      delivered = true;
+      dbService.deliverBook(widget.email, widget.isbn, widget.location);
+    }
+
+    if (widget.delivered) {
       delivered = true;
     }
 
