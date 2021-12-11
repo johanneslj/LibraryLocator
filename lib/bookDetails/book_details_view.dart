@@ -256,7 +256,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   bool isAvailable(String library) {
     bool isAvailable = false;
 
-    if (!library.split("Tilgjengelig: ")[1].contains("0")) {
+    if (!library.split("Tilgjengelig:")[1].contains(" 0")) {
       isAvailable = true;
     }
 

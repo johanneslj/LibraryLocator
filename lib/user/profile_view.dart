@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:library_locator/reviews/loan_card.dart';
 import 'package:library_locator/services/database_service.dart';
 import 'package:library_locator/views/home.dart';
 import 'package:library_locator/user/login_view.dart';
@@ -18,31 +19,9 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
 
-  ScrollController _mainScrollCtrl = ScrollController();
-
   ScrollController controller = ScrollController();
   ScrollController _loanScrollCtrl = ScrollController();
   ScrollController _reviewScrollCtrl = ScrollController();
-
-  List<Widget> loanList(List<LoanModel> loans) {
-    List<Widget> loanCards = <Widget>[];
-
-    for (LoanModel loan in loans) {
-      loanCards.add(Container(
-          child: Row(
-        children: [
-          Image(image: NetworkImage('https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'), height: 100),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text("Title: " + loan.title), Text("To: " + loan.to!), Text("From: " + loan.from!)],
-          )
-        ],
-      )));
-    }
-
-    return loanCards;
-  }
 
   TextButton signInAndOutButton(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
@@ -99,8 +78,8 @@ class _ProfilePageState extends State<ProfilePage> {
             Text("Please sign in to view your profile.", style: TextStyle(fontSize: 24)),
           ]));
     } else {
-      Future<List<LoanModel>> futureLoans = DatabaseService().getLoans(FirebaseAuth.instance.currentUser!.email.toString());
-      List<LoanModel> loans = List.empty();
+      Future<List<Widget>> futureLoans = DatabaseService().getLoans(FirebaseAuth.instance.currentUser!.email.toString());
+      List<Widget> loans = List.empty();
 
       Future<List<Widget>> futureReviewCards = DatabaseService().getReviewsByUser(FirebaseAuth.instance.currentUser!.email.toString());
       List<Widget> reviewCards = <Widget>[];
@@ -143,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return true;
                                   },
                                   child: ListView(
-                                      children: loanList(loans),
+                                      children: loans,
                                       controller: _loanScrollCtrl
                                   )
                                 );

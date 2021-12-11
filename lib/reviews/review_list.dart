@@ -31,9 +31,22 @@ class _ReviewListState extends State<ReviewList> {
             snapshot.data!.forEach((element) {
               list.add(element);
             });
-          return Center(child: new Column(children: list));
+          return Center(child: makeListView(list));
         }
       },
+    );
+  }
+
+  Column makeListView(List<Widget> bookCards) {
+    return Column(
+      children: [
+        for (var card in bookCards) Column(children: [
+          card,
+          if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
+          // then don't add a divider at the bottom.
+            Divider(),
+        ]),
+      ],
     );
   }
 

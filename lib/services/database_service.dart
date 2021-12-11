@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:library_locator/reviews/loan_card.dart';
 import 'package:library_locator/user/loan_model.dart';
 import 'package:library_locator/reviews/review_card.dart';
 import '../reviews/book_card.dart';
@@ -118,8 +119,8 @@ class DatabaseService {
 
   /// Get the loans given by a user
   /// It gets the loan from the database on the users email
-  Future<List<LoanModel>> getLoans(String email) async {
-    List<LoanModel> loanList = <LoanModel>[];
+  Future<List<Widget>> getLoans(String email) async {
+    List<LoanCard> loanList = <LoanCard>[];
 
     final loans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans");
 
@@ -130,12 +131,27 @@ class DatabaseService {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
         innerData = new Map<dynamic, dynamic>.from(value);
-        String title = "Placeholder title"; // TODO Get title with ISBN from backend here!
-        loanList.add(new LoanModel(email, title, key.toString(), innerData["from"], innerData["to"]));
+        String title = "Placeholder title";// TODO Get title with ISBN from backend here!
+        loanList.add(new LoanCard(imageURL: '', from: createDateFromString(innerData["from"]), to: createDateFromString(innerData["to"]), title: title, email: email,));
       });
     });
 
+    loanList.sort((LoanCard a, LoanCard b) => -a.from.difference(b.from).inHours);
+
     return loanList;
+  }
+
+  void deliverBook(String email) {
+
+  }
+
+  DateTime createDateFromString(String dateString) {
+    List<String> dayMonthYear = dateString.split("-");
+    int year = int.parse(dayMonthYear[0]);
+    int month = int.parse(dayMonthYear[1]);
+    int day = int.parse(dayMonthYear[2]);
+    DateTime date = new DateTime(year, month, day);
+    return date;
   }
 
   /// Gets the reviews made by a user
@@ -170,8 +186,8 @@ class DatabaseService {
 
     final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/" + name);
     final reviewsUser = firebaseDatabase.child("users/" + name + "/reviews/" + isbn);
-    reviews.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
-    reviewsUser.set({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
+    reviews.update({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
+    reviewsUser.update({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
   }
 
   /// Loans a book to a user if the book is available
