@@ -10,7 +10,7 @@ import 'package:dio/dio.dart';
 
 class DatabaseService {
   final firebaseDatabase = FirebaseDatabase.instance.reference();
-  final Apiurl = 'http://localhost:8080';
+  final Apiurl = 'http://mobilelibraryapi.azurewebsites.net';
   final Dio dio = new Dio();
   final defaultImage = "https://bit.ly/3DxOC5k";
 
