@@ -133,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => HomePage()),
+                                            builder: (context) => LoginPage()),
                                       );
                                     } on FirebaseAuthException catch(e) {
                                       print(e);
