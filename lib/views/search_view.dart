@@ -50,7 +50,7 @@ class _SearchViewState extends State<SearchView> {
                               return Center(child: Text('Error: ${snapshot.error}'));
                             else
                               bookCards = snapshot.data!;
-                            return makeListView(bookCards);
+                            return bookCards.isEmpty ? Center(child: Text("No books were found", style: TextStyle(color: Colors.grey, fontSize: 20),),): makeListView(bookCards);
                           }
                         })
           )),
