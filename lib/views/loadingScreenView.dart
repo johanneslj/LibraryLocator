@@ -18,7 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen>{
           child: Column(children: [
         Text(
           "Please wait, it's loading...",
-          style: TextStyle(fontSize: widget.fontSize),
+          style: TextStyle(fontSize: widget.fontSize, color: Colors.white70, decoration: TextDecoration.none),
           textAlign: TextAlign.center,
           textDirection: TextDirection.ltr,
         ),

@@ -248,7 +248,7 @@ class DatabaseService {
     String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
 
     String selectedLibrary = selected.split(" ")[0];
-    int currentlyAvailable = int.parse(selected.split("Tilgjengelig: ")[1]) - 1;
+    int currentlyAvailable = int.parse(selected.split("Available: ")[1]) - 1;
     final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
     availability.set(currentlyAvailable);
 
