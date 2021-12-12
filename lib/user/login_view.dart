@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                                     (RegisterPage())),
                                           );
                                         },
-                                        child: const Text('Sign up', style: TextStyle(color: Colors.amberAccent))),
+                                        child: const Text('Register', style: TextStyle(color: Colors.amberAccent))),
                                   ]),
                             ]),
                           ))
