@@ -1,56 +1,41 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:library_locator/user/profile_view.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-import '../bookDetails/book_details_view.dart';
 import '../services/database_service.dart';
 import 'loadingScreenView.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final List<Widget>? cache;
+  final Function()? updateCache;
 
+  const HomePage({Key? key, this.updateCache, this.cache}) : super(key: key);
   @override
   _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  /*
-  IconButton signInAndOutButton(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser != null) {
-      return IconButton(
-          icon: Icon(Icons.logout),
-          onPressed: () async {
-            await FirebaseAuth.instance.signOut();
-            setState(() => null);
-          });
-    } else {
-      return IconButton(
-          icon: Icon(Icons.login),
-          onPressed: () async {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => BookDetailsView(isbn: "12345")));
-          });
-    }
-  }
-
-   */
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Widget>> test = DatabaseService().getBooks();
-    Future<List<Widget>> futureBookCards = DatabaseService().getBooks();
     List<Widget> bookCards = <Widget>[];
+    Future<List<Widget>>? futureBookCards;
 
-    futureBookCards.then((books) => bookCards = books);
+    if (widget.cache == null || widget.cache!.isEmpty) {
+      futureBookCards = DatabaseService().getBooks();
+      futureBookCards.then((books) => bookCards = books);
+      if(widget.updateCache != null) {
+        widget.updateCache!();
+      }
+    } else {
+      bookCards = widget.cache!;
+    }
 
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text("Home"),
+        title: Center(child:Text("Home")),
       ),
         body: Column(children: [
           Expanded(child:
+          futureBookCards != null ? // If books have not been cached load books.
           FutureBuilder(
             // Displays books when done
               future: futureBookCards,
@@ -65,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                   return makeListView(bookCards);
                 }
               })
+              : makeListView(bookCards),
           ),
     ]));
   }

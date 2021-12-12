@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
 import '../services/database_service.dart';
 import 'loadingScreenView.dart';
 
 class SearchView extends StatefulWidget {
-  const SearchView({Key? key}) : super(key: key);
+  final List<Widget>? cache;
+  const SearchView({Key? key, this.cache}) : super(key: key);
 
   @override
   _SearchViewState createState() => _SearchViewState();
@@ -13,19 +15,19 @@ class SearchView extends StatefulWidget {
 class _SearchViewState extends State<SearchView> {
 
   TextEditingController _searchQueryController = TextEditingController();
-  bool _isSearching = false;
   String searchQuery = "Search query";
+  bool searched = false;
 
   @override
   Widget build(BuildContext context) {
-    Future<List<Widget>> futureBookCards = DatabaseService().getBooks();
+    Future<List<Widget>> futureBookCards = DatabaseService().search(searchQuery);
     List<Widget> bookCards = <Widget>[];
 
     futureBookCards.then((books) => bookCards = books);
 
     return Scaffold(
         appBar: AppBar(
-          leading: _isSearching ? const BackButton() : Container(),
+          leading: null,
           title: _buildSearchField(),
           actions: _buildActions(),
         ),
@@ -34,21 +36,24 @@ class _SearchViewState extends State<SearchView> {
             child: Container(
                 height: 255,
                 padding: EdgeInsets.only(left: 4, right: 4),
-                child: FutureBuilder(
-                  // Displays books when done
-                    future: futureBookCards,
-                    builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: LoadingScreen(fontSize:30,));
-                      } else {
-                        if (snapshot.hasError)
-                          return Center(child: Text('Error: ${snapshot.error}'));
-                        else
-                          bookCards = snapshot.data!;
-                        return makeListView(bookCards);
-                      }
-                    })),
-          ),
+                child:
+                (bookCards.isEmpty && (null != widget.cache) && widget.cache!.isNotEmpty && !searched)
+                    ? makeListView(widget.cache!)
+                    : FutureBuilder(
+                        // Displays books when done
+                        future: futureBookCards,
+                        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+                          if (snapshot.connectionState == ConnectionState.waiting) {
+                            return Center(child: LoadingScreen(fontSize:30,));
+                          } else {
+                            if (snapshot.hasError)
+                              return Center(child: Text('Error: ${snapshot.error}'));
+                            else
+                              bookCards = snapshot.data!;
+                            return makeListView(bookCards);
+                          }
+                        })
+          )),
         ]));
   }
 
@@ -68,7 +73,7 @@ class _SearchViewState extends State<SearchView> {
   Widget _buildSearchField() {
     return TextField(
       controller: _searchQueryController,
-      autofocus: true,
+      autofocus: false,
       decoration: InputDecoration(
         hintText: "Search Data...",
         border: InputBorder.none,
@@ -80,17 +85,6 @@ class _SearchViewState extends State<SearchView> {
   }
 
   List<Widget> _buildActions() {
-    if (_isSearching) {
-      return <Widget>[
-        IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            _clearSearchQuery();
-          },
-        ),
-      ];
-    }
-
     return <Widget>[
       IconButton(
         icon: const Icon(Icons.clear),
@@ -98,28 +92,30 @@ class _SearchViewState extends State<SearchView> {
           _clearSearchQuery();
         },
       ),
+      IconButton(
+        icon: const Icon(Icons.camera_alt),
+        onPressed: () async {
+          String barcodeResult = await FlutterBarcodeScanner
+              .scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
+          _searchQueryController.text = barcodeResult;
+          updateSearchQuery(barcodeResult);
+          searched = true;
+          FocusScope.of(context).unfocus();
+        },
+      ),IconButton(
+        icon: const Icon(Icons.search),
+        onPressed: () {
+          updateSearchQuery(_searchQueryController.text);
+          searched = true;
+          FocusScope.of(context).unfocus();
+        },
+      ),
     ];
-  }
-
-  void _startSearch() {
-    ModalRoute.of(context)!.addLocalHistoryEntry(LocalHistoryEntry(onRemove: _stopSearching));
-
-    setState(() {
-      _isSearching = true;
-    });
   }
 
   void updateSearchQuery(String newQuery) {
     setState(() {
       searchQuery = newQuery;
-    });
-  }
-
-  void _stopSearching() {
-    _clearSearchQuery();
-
-    setState(() {
-      _isSearching = false;
     });
   }
 
@@ -129,8 +125,4 @@ class _SearchViewState extends State<SearchView> {
       updateSearchQuery("");
     });
   }
-
-
-
-
 }
