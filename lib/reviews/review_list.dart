@@ -31,7 +31,9 @@ class _ReviewListState extends State<ReviewList> {
             snapshot.data!.forEach((element) {
               list.add(element);
             });
-          return Center(child: makeListView(list));
+          return Center(child: (list.isEmpty)
+              ? Text("There are no reviews for this book yet.\n", style: TextStyle(fontSize: 18, color: Colors.grey), overflow: TextOverflow.ellipsis,)
+              : makeListView(list));
         }
       },
     );

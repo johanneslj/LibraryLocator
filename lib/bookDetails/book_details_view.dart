@@ -17,10 +17,6 @@ class BookDetailsView extends StatefulWidget {
   final String imageURL;
   final String summary;
 
-
-
-
-
   @override
   _BookDetailsViewState createState() => _BookDetailsViewState();
 }
@@ -150,7 +146,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                                 child: Text("Submit"),
                                                 onPressed: () {
                                                   print(getRating());
-                                                  dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text);
+                                                  dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text, widget.title);
                                                   Navigator.pop(context);
                                                   setRating("3");
                                                 })

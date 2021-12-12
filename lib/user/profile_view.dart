@@ -121,7 +121,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                     controller.jumpTo(controller.offset + value.overscroll);
                                     return true;
                                   },
-                                  child: ListView(
+                                  child: (loans.isEmpty)
+                                      ? Center(child: Text("You have no previous loans", style: TextStyle(fontSize: 18, color: Colors.grey)))
+                                      : ListView(
                                       children: loans,
                                       controller: _loanScrollCtrl
                                   )
@@ -149,7 +151,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         return true;
                                       },
                                       child: ListView(
-                                          children: reviewCards,
+                                          children: (reviewCards.isEmpty)
+                                              ? [Center(child: Text("You have not written any reviews yet", style: TextStyle(fontSize: 18, color: Colors.grey)), heightFactor: 8, )]
+                                              : reviewCards,
                                           controller: _reviewScrollCtrl
                                       )
                                   );

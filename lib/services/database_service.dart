@@ -21,14 +21,16 @@ class DatabaseService {
     final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     await reviews.get().then((DataSnapshot snapshot) {
-      data = new Map<dynamic, dynamic>.from(snapshot.value);
-      data.forEach((key, value) {
-        // Here key is the reviewers Name/ID and the value consists of the star rating and text in the review
-        List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
-        String reviewText = listOfReviewContent.elementAt(1).split("text: ").elementAt(1);
-        double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-        reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key.split("@")[0]));
-      });
+      if (snapshot.exists) {
+        data = new Map<dynamic, dynamic>.from(snapshot.value);
+        data.forEach((key, value) {
+          // Here key is the reviewers Name/ID and the value consists of the star rating and text in the review
+          List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+          String reviewText = listOfReviewContent.elementAt(1).split("text: ").elementAt(1);
+          double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+          reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key.split("@")[0]));
+        });
+      }
     });
     return reviewList;
   }
@@ -138,15 +140,25 @@ class DatabaseService {
     double averageRating = 0;
     final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/");
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
+
     await reviews.get().then((DataSnapshot snapshot) {
-      data = new Map<dynamic, dynamic>.from(snapshot.value);
-      double totalRating = 0;
-      data.forEach((key, value) {
-        List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
-        double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-        totalRating += reviewStars;
-      });
-      averageRating = totalRating / data.length;
+      if (snapshot.exists) {
+        data = new Map<dynamic, dynamic>.from((snapshot.value));
+
+        double totalRating = 0;
+
+        data.forEach((key, value) {
+          List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+          double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+          totalRating += reviewStars;
+        });
+
+        if (data.length > 0) {
+          averageRating = totalRating / data.length;
+        }
+      } else {
+        averageRating = 0;
+      }
     });
 
     return averageRating;
@@ -219,13 +231,14 @@ class DatabaseService {
 
     await reviews.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
-      data.forEach((key, value) {
+      data.forEach((key, value) async {
         reviewContent = new Map<dynamic, dynamic>.from(value);
 
         String reviewText = reviewContent["text"].toString();
         double reviewStars = double.parse(reviewContent["stars"].toString());
+        String title = (reviewContent["title"] != null) ? reviewContent["title"] : "N/A";
 
-        reviewCards.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key));
+        reviewCards.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: title));
       });
     });
 
@@ -233,13 +246,13 @@ class DatabaseService {
   }
 
   /// Adds a review from a user to the database
-  void addReview(String isbn, double rating, String reviewText) {
+  void addReview(String isbn, double rating, String reviewText, String title) {
     String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
 
     final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/" + name);
     final reviewsUser = firebaseDatabase.child("users/" + name + "/reviews/" + isbn);
-    reviews.update({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
-    reviewsUser.update({"stars": rating, "text": reviewText}).catchError((error) => print("OOps"));
+    reviews.update({"stars": rating, "text": reviewText, "title": title}).catchError((error) => print("OOps"));
+    reviewsUser.update({"stars": rating, "text": reviewText, "title": title}).catchError((error) => print("OOps"));
   }
 
   /// Loans a book to a user if the book is available
