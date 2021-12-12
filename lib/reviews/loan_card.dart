@@ -121,9 +121,7 @@ class _LoanCardState extends State<LoanCard> {
     bool delivered = false;
 
     if (!to.isAfter(DateTime.now())) {
-      //delivered = true;
       overdue = true;
-      //dbService.deliverBook(widget.email, widget.isbn, widget.location);
     }
 
     if (widget.delivered) {
