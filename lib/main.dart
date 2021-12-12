@@ -69,6 +69,7 @@ class _AppState extends State<App> {
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'Library Locator',
+              debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 brightness: Brightness.dark,
                 primarySwatch: Colors.amber,
