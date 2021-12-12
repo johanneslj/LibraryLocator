@@ -40,8 +40,10 @@ class _MapWidgetState extends State<MapWidget> {
       zoom = 15;
     } else if (distance < 270) {
       zoom = 5.5;
-    } else if (distance > 300) {
+    } else if (distance < 500) {
       zoom = 5;
+    } else if (distance > 500) {
+      zoom = 1;
     }
 
     _controller.animateCamera(CameraUpdate.newLatLngZoom(positionToMoveTo, zoom));
