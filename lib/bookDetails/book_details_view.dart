@@ -37,10 +37,9 @@ class _BookDetailsViewState extends State<BookDetailsView> {
         future: dbService.getAverageRating(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: LoadingScreen(
+            return  LoadingScreen(
               fontSize: 30,
-            ));
+            );
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -196,14 +195,14 @@ class _BookDetailsViewState extends State<BookDetailsView> {
         future: dbService.getAvailability(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<Map<String, String>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: LoadingScreen(fontSize: 30));
+            return Center(child: LoadingScreen(fontSize: 15));
           } else {
             if (snapshot.hasError)
               return Center(child: Text('Error: ${snapshot.error}'));
             else {
               availabilityList.clear();
               snapshot.data!.forEach((key, value) {
-                String formattedString = key + " : Tilgjengelig: " + value;
+                String formattedString = key + " : Available: " + value;
                 availabilityList.add(formattedString);
               });
               availabilityList.sort();
@@ -242,7 +241,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   bool canLoan(String library) {
     bool canLoan = false;
     if (!library.contains("Select Library")) {
-      if (!library.split("Tilgjengelig")[1].contains(":0")) {
+      if (!library.split("Available:")[1].contains(" 0")) {
         canLoan = true;
       }
     }
@@ -252,7 +251,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
   bool isAvailable(String library) {
     bool isAvailable = false;
 
-    if (!library.split("Tilgjengelig:")[1].contains(" 0")) {
+    if (!library.split("Available:")[1].contains(" 0")) {
       isAvailable = true;
     }
 
