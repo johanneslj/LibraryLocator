@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:library_locator/main.dart';
 import '../views/home.dart';
 import 'login_view.dart';
 
@@ -133,7 +134,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => LoginPage()),
+                                            builder: (context) => App(),
+                                            maintainState: false,
+                                        ),
                                       );
                                     } on FirebaseAuthException catch(e) {
                                       print(e);
