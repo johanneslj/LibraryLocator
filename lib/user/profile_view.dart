@@ -176,7 +176,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           TextButton(
                                               onPressed: () {
                                                 FirebaseAuth.instance.currentUser!.delete();
-                                                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
                                                 },
                                               child: Text("Delete"))
                                         ]);
