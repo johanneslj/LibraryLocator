@@ -72,7 +72,7 @@ class _LoanCardState extends State<LoanCard> {
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 20,
                               color: !isDelivered(widget.to) ? null : Colors.grey,
                             )),
                         Text("From: " + widget.from.toString().split(" ")[0],

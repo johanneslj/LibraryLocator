@@ -25,7 +25,10 @@ class _ReviewCardState extends State<ReviewCard> {
             padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
             child: Column(
               children: [
-                Text(widget.username, textAlign: TextAlign.left),
+                Text(widget.username,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.left,
+                    ),
                 RatingBarIndicator(
                   rating: widget.stars,
                   itemBuilder: (context, index) => Icon(
@@ -33,14 +36,15 @@ class _ReviewCardState extends State<ReviewCard> {
                     color: Colors.amber,
                   ),
                   itemCount: 5,
-                  itemSize: 10,
+                  itemSize: 15,
                 ),
+                 DescriptionTextWidget(text: "«" +  widget.reviewText + "»"),
               ],
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.end,
             ),
           ),
-          Flexible(child: DescriptionTextWidget(text: widget.reviewText)),
+
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
       )

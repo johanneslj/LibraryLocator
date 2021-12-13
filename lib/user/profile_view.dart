@@ -92,7 +92,7 @@ class _ProfilePageState extends State<ProfilePage> {
             title: Text('Profile'),
             actions: <Widget>[signInAndOutButton(context)],
           ),
-          body: ListView(
+          body: ListView( 
               controller: controller,
               children: <Widget>[
                 Center(
