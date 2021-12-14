@@ -251,7 +251,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
 
   bool canLoan(String library) {
     bool canLoan = false;
-    if (!library.contains("Select Library")) {
+    if (!library.contains("Select Library") && FirebaseAuth.instance.currentUser != null) {
       if (!library.split("Available:")[1].contains(" 0")) {
         canLoan = true;
       }
