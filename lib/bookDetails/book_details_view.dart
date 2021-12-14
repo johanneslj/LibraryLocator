@@ -75,7 +75,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                             ),
                           ]),
                         ])),
-                    Row(children: [
+                    Center(child: Row(children: [
                       Padding(
                           padding: EdgeInsets.all(10),
                           child: SizedBox(
