@@ -199,14 +199,11 @@ class DatabaseService {
       data.forEach((key, value) {
 
         innerData = new Map<dynamic, dynamic>.from(value);
-        String title = "Title"; // TODO Get title with ISBN from backend here!
-
-        String imageURL = "";
         loanList.add(new LoanCard(
-          imageURL: '',
+          imageURL: innerData["imageURL"],
           from: createDateFromString(innerData["from"]),
           to: createDateFromString(innerData["to"]),
-          title: title,
+          title: innerData["title"],
           email: email,
           isbn: key,
           delivered: innerData["delivered"],
@@ -298,7 +295,7 @@ class DatabaseService {
 
   /// Loans a book to a user if the book is available
   /// this is registered in the database
-  void loanBook(String isbn, String selected) {
+  void loanBook(String isbn, String selected,String title,String imageURL) {
     String name = FirebaseAuth.instance.currentUser!.email.toString()
         .replaceAll(".", " ");
 
@@ -320,7 +317,9 @@ class DatabaseService {
       "from": fromString,
       "to": toString,
       "delivered": false,
-      "location": selectedLibrary
+      "location": selectedLibrary,
+      "title": title,
+      "imageURL": imageURL
     }).catchError((error) => print(error));
   }
 

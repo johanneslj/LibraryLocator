@@ -226,7 +226,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                       onPressed: !canLoan(selectedLibrary)
                           ? null
                           : () => {
-                                dbService.loanBook(widget.isbn, selectedLibrary),
+                                dbService.loanBook(widget.isbn, selectedLibrary,widget.title,widget.imageURL),
                                 selectedLibrary = "Select Library",
                                 setState(() {}),
                               }),
