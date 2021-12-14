@@ -34,7 +34,7 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
     return new Container(
       padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: secondHalf.isEmpty
-          ? new Text(firstHalf)
+          ? new Text(firstHalf, textAlign: TextAlign.left,)
           : new Column(
         children: <Widget>[
           new Text(flag ? (firstHalf + "...") : (firstHalf + secondHalf)),

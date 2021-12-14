@@ -75,7 +75,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                             ),
                           ]),
                         ])),
-                    Row(children: [
+                    Center(child: Row(children: [
                       Padding(
                           padding: EdgeInsets.all(10),
                           child: SizedBox(
@@ -91,7 +91,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                         child: _makeDropdown(),
                       ),
                       //TODO make dropdown work based on library that is closest,
-                    ]),
+                    ])),
                     Padding(
                         padding: EdgeInsets.all(10),
                         child: Row(children: [

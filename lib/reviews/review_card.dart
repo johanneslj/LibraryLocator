@@ -25,8 +25,11 @@ class _ReviewCardState extends State<ReviewCard> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(widget.username,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
@@ -40,10 +43,8 @@ class _ReviewCardState extends State<ReviewCard> {
                     itemCount: 5,
                     itemSize: 15,
                   ),
-                  DescriptionTextWidget(text: "«" +  widget.reviewText + "»"),
+                  DescriptionTextWidget(text: widget.reviewText),
                 ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
               ),
             ),
           ),
