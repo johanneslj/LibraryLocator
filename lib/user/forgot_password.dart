@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../main.dart';
 import '../views/home.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -83,7 +84,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                               Navigator.push(
                                                   context,
                                                   MaterialPageRoute(
-                                                      builder: (context) => HomePage()
+                                                      builder: (context) => App()
                                                   )
                                               );
                                               Fluttertoast.showToast(

@@ -68,7 +68,7 @@ class _LoanCardState extends State<LoanCard> {
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       children: [
-                        Text(isDelivered(widget.to) ? widget.title : !overdue ? widget.title :  "(OVERDUE) " + widget.title,
+                        Text(isDelivered(widget.to) ? widget.title : !overdue ? widget.title :  "(OVERDUE) " + widget.title ,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: TextStyle(

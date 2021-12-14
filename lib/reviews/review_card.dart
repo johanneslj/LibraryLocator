@@ -21,29 +21,33 @@ class _ReviewCardState extends State<ReviewCard> {
         child: Column(children: [
       Row(
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-            child: Column(
-              children: [
-                Text(widget.username,
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Column(
+                children: [
+                  Text(widget.username,
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.left,
-                    ),
-                RatingBarIndicator(
-                  rating: widget.stars,
-                  itemBuilder: (context, index) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
                   ),
-                  itemCount: 5,
-                  itemSize: 15,
-                ),
-                 DescriptionTextWidget(text: "«" +  widget.reviewText + "»"),
-              ],
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+                  RatingBarIndicator(
+                    rating: widget.stars,
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 15,
+                  ),
+                  DescriptionTextWidget(text: "«" +  widget.reviewText + "»"),
+                ],
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+              ),
             ),
           ),
+
 
         ],
         crossAxisAlignment: CrossAxisAlignment.start,

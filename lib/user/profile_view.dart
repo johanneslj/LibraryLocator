@@ -1,16 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:library_locator/reviews/loan_card.dart';
 import 'package:library_locator/services/database_service.dart';
-import 'package:library_locator/views/home.dart';
 import 'package:library_locator/user/login_view.dart';
 import 'package:library_locator/main.dart';
-import 'package:library_locator/reviews/review_card.dart';
-
-import 'loan_model.dart';
 
 class ProfilePage extends StatefulWidget {
   @override
@@ -23,6 +17,8 @@ class _ProfilePageState extends State<ProfilePage> {
   ScrollController _loanScrollCtrl = ScrollController();
   ScrollController _reviewScrollCtrl = ScrollController();
 
+  /// Creates the button for the toolbar which is either a sign in or sign out
+  /// button depending on if there is a user instance or not.
   TextButton signInAndOutButton(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
       return TextButton.icon(
@@ -107,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               // Displays loan history when request is completed
                               future: futureLoans,
                               builder: (context, builder) {
-                                // Lets the child ListView scroll the parent when reaching either edge.
+                                // Lets the child ListView scroll the ListView ancestor when reaching either edge.
                                 return NotificationListener<OverscrollNotification>(
                                   onNotification: (OverscrollNotification value) {
                                     if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
@@ -122,6 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                     return true;
                                   },
                                   child: (loans.isEmpty)
+                                      // If user has no previous loans display this
                                       ? Center(child: Text("You have no previous loans", style: TextStyle(fontSize: 18, color: Colors.grey)))
                                       : ListView(
                                       children: loans,
@@ -137,6 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               // Builds review cards when request is completed
                               future: futureReviewCards,
                               builder: (context, builder) {
+                                // Lets the child ListView scroll the ListView ancestor when reaching either edge.
                                 return NotificationListener<OverscrollNotification>(
                                       onNotification: (OverscrollNotification value) {
                                         if (value.overscroll < 0 && controller.offset + value.overscroll <= 0) {
@@ -164,6 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               showDialog(
                                   context: context,
                                   builder: (context) {
+                                    // Confirmation dialog for deleting user.
                                     return AlertDialog(
                                         title: Text("Delete account"),
                                         content: Text("Are you sure you want to delete your account? This action can not be reverted."),
@@ -175,7 +174,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                               child: Text("Cancel")),
                                           TextButton(
                                               onPressed: () {
+                                                // Deletes the user from firebase.
                                                 FirebaseAuth.instance.currentUser!.delete();
+                                                FirebaseAuth.instance.signOut();
                                                 Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
                                                 },
                                               child: Text("Delete"))
