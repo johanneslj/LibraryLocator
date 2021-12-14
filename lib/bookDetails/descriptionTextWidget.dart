@@ -32,7 +32,6 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      width: 250,
       padding: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
       child: secondHalf.isEmpty
           ? new Text(firstHalf)
