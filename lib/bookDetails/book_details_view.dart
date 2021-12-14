@@ -126,6 +126,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                                       },
                                                     ),
                                                     TextField(
+
                                                       keyboardType: TextInputType.multiline,
                                                       controller: reviewTextController,
                                                       maxLines: 6,
@@ -144,10 +145,20 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                             ElevatedButton(
                                                 child: Text("Submit"),
                                                 onPressed: () {
-                                                  print(getRating());
-                                                  dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text, widget.title);
-                                                  Navigator.pop(context);
-                                                  setRating("3");
+                                                  if(reviewTextController.text.length > 0){
+                                                    print(getRating());
+                                                    dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text, widget.title);
+                                                    Navigator.pop(context);
+                                                    setRating("3");
+                                                  }
+                                                  else{
+                                                    Fluttertoast.showToast(
+                                                        msg: "You need review text to add a review",
+                                                        toastLength: Toast.LENGTH_LONG,
+                                                        gravity: ToastGravity.BOTTOM,
+                                                        fontSize: 16.0);
+                                                  }
+
                                                 })
                                           ],
                                         );
