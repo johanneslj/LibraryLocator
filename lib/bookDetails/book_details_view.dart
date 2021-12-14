@@ -90,7 +90,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                         height: 150,
                         child: _makeDropdown(),
                       ),
-                      //TODO make dropdown work based on library that is closest,
                     ]),
                     Padding(
                         padding: EdgeInsets.all(10),
