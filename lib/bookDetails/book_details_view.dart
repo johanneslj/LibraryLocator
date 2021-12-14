@@ -90,7 +90,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                         height: 150,
                         child: _makeDropdown(),
                       ),
-                    ]),
+                    ])),
                     Padding(
                         padding: EdgeInsets.all(10),
                         child: Row(children: [

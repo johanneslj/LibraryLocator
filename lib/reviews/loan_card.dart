@@ -49,7 +49,7 @@ class _LoanCardState extends State<LoanCard> {
                     backgroundBlendMode: BlendMode.overlay,
                   )
                 : BoxDecoration(
-                    color: Colors.grey,
+                    color: Colors.transparent,
                     backgroundBlendMode: BlendMode.saturation,
                   ),
             child: Padding(
