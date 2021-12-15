@@ -38,6 +38,8 @@ class _MapWidgetState extends State<MapWidget> {
     LatLng positionToMoveTo = calculateMidpoint(currentLatLng, _cameraPosition);
     if (distance < 1) {
       zoom = 15;
+    }else if (distance < 30){
+      zoom = 11;
     } else if (distance < 270) {
       zoom = 5.5;
     } else if (distance < 500) {
