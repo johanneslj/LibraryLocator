@@ -6,6 +6,7 @@ import 'loadingScreenView.dart';
 
 class SearchView extends StatefulWidget {
   final List<Widget>? cache;
+
   const SearchView({Key? key, this.cache}) : super(key: key);
 
   @override
@@ -13,7 +14,6 @@ class SearchView extends StatefulWidget {
 }
 
 class _SearchViewState extends State<SearchView> {
-
   TextEditingController _searchQueryController = TextEditingController();
   String searchQuery = "Search query";
   bool searched = false;
@@ -33,39 +33,48 @@ class _SearchViewState extends State<SearchView> {
         ),
         body: Column(children: [
           Expanded(
-            child: Container(
-                height: 255,
-                padding: EdgeInsets.only(left: 4, right: 4),
-                child:
-                (bookCards.isEmpty && (null != widget.cache) && widget.cache!.isNotEmpty && !searched)
-                    ? makeListView(widget.cache!)
-                    : FutureBuilder(
-                        // Displays books when done
-                        future: futureBookCards,
-                        builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-                            return Center(child: LoadingScreen(fontSize:30,));
-                          } else {
-                            if (snapshot.hasError)
-                              return Center(child: Text('Error: ${snapshot.error}'));
-                            else
-                              bookCards = snapshot.data!;
-                            return bookCards.isEmpty ? Center(child: Text("No books were found", style: TextStyle(color: Colors.grey, fontSize: 20),),): makeListView(bookCards);
-                          }
-                        })
-          )),
+              child: Container(
+                  height: 255,
+                  padding: EdgeInsets.only(left: 4, right: 4),
+                  child: (bookCards.isEmpty && (null != widget.cache) && widget.cache!.isNotEmpty && !searched)
+                      ? makeListView(widget.cache!)
+                      : FutureBuilder(
+                          // Displays books when done
+                          future: futureBookCards,
+                          builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(
+                                  child: LoadingScreen(
+                                fontSize: 30,
+                              ));
+                            } else {
+                              if (snapshot.hasError)
+                                return Center(child: Text('Error: ${snapshot.error}'));
+                              else
+                                bookCards = snapshot.data!;
+                              return bookCards.isEmpty
+                                  ? Center(
+                                      child: Text(
+                                        "No books were found",
+                                        style: TextStyle(color: Colors.grey, fontSize: 20),
+                                      ),
+                                    )
+                                  : makeListView(bookCards);
+                            }
+                          }))),
         ]));
   }
 
   ListView makeListView(List<Widget> bookCards) {
     return ListView(
       children: [
-        for (var card in bookCards) Column(children: [
-          card,
-          if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
-          // then don't add a divider at the bottom.
-            Divider(color: Colors.white54),
-        ]),
+        for (var card in bookCards)
+          Column(children: [
+            card,
+            if (!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
+              // then don't add a divider at the bottom.
+              Divider(color: Colors.white54),
+          ]),
       ],
     );
   }
@@ -95,14 +104,14 @@ class _SearchViewState extends State<SearchView> {
       IconButton(
         icon: const Icon(Icons.camera_alt),
         onPressed: () async {
-          String barcodeResult = await FlutterBarcodeScanner
-              .scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
+          String barcodeResult = await FlutterBarcodeScanner.scanBarcode('#ff6666', 'Cancel', true, ScanMode.BARCODE);
           _searchQueryController.text = barcodeResult;
           updateSearchQuery(barcodeResult);
           searched = true;
           FocusScope.of(context).unfocus();
         },
-      ),IconButton(
+      ),
+      IconButton(
         icon: const Icon(Icons.search),
         onPressed: () {
           updateSearchQuery(_searchQueryController.text);

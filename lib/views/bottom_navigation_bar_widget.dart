@@ -16,18 +16,13 @@ class BottomNavigationBarWidget extends ConsumerWidget {
     List<BottomNavigationBarItem> getNavigationBarItem() {
       List<BottomNavigationBarItem> barItemsList = [];
       print(_currentUser);
-      barItemsList.add(
-          BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)));
-      barItemsList.add(BottomNavigationBarItem(
-          label: "Search", icon: Icon(Icons.search)));
+      barItemsList.add(BottomNavigationBarItem(label: "Home", icon: Icon(Icons.home)));
+      barItemsList.add(BottomNavigationBarItem(label: "Search", icon: Icon(Icons.search)));
       if (_currentUser != null) {
-          barItemsList.add(BottomNavigationBarItem(
-              label: "Profile", icon: Icon(Icons.person)));
-          return barItemsList;
-
+        barItemsList.add(BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person)));
+        return barItemsList;
       } else {
-        barItemsList.add(BottomNavigationBarItem(
-            label: "Login", icon: Icon(Icons.person)));
+        barItemsList.add(BottomNavigationBarItem(label: "Login", icon: Icon(Icons.person)));
         return barItemsList;
       }
     }

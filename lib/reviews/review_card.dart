@@ -28,7 +28,8 @@ class _ReviewCardState extends State<ReviewCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(widget.username,
+                  Text(
+                    widget.username,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -48,8 +49,6 @@ class _ReviewCardState extends State<ReviewCard> {
               ),
             ),
           ),
-
-
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
       )

@@ -23,7 +23,10 @@ class _ReviewListState extends State<ReviewList> {
       future: dbService.getAllReviewsForBook(widget.isbn),
       builder: (BuildContext context, AsyncSnapshot<List<Widget>> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: LoadingScreen(fontSize: 20,));
+          return Center(
+              child: LoadingScreen(
+            fontSize: 20,
+          ));
         } else {
           if (snapshot.hasError)
             return Center(child: Text('Error: ${snapshot.error}'));
@@ -31,9 +34,14 @@ class _ReviewListState extends State<ReviewList> {
             snapshot.data!.forEach((element) {
               list.add(element);
             });
-          return Center(child: (list.isEmpty)
-              ? Text("There are no reviews for this book yet.\n", style: TextStyle(fontSize: 18, color: Colors.grey), overflow: TextOverflow.ellipsis,)
-              : makeListView(list));
+          return Center(
+              child: (list.isEmpty)
+                  ? Text(
+                      "There are no reviews for this book yet.\n",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  : makeListView(list));
         }
       },
     );
@@ -42,12 +50,13 @@ class _ReviewListState extends State<ReviewList> {
   Column makeListView(List<Widget> bookCards) {
     return Column(
       children: [
-        for (var card in bookCards) Column(children: [
-          card,
-          if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
-          // then don't add a divider at the bottom.
-            Divider(),
-        ]),
+        for (var card in bookCards)
+          Column(children: [
+            card,
+            if (!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
+              // then don't add a divider at the bottom.
+              Divider(),
+          ]),
       ],
     );
   }

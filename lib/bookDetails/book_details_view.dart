@@ -10,7 +10,8 @@ import '../views/loadingScreenView.dart';
 import '../services/database_service.dart';
 
 class BookDetailsView extends StatefulWidget {
-  BookDetailsView({Key? key, required this.isbn, required this.title,required this.author, required this.imageURL,required this.summary}) : super(key: key);
+  BookDetailsView({Key? key, required this.isbn, required this.title, required this.author, required this.imageURL, required this.summary})
+      : super(key: key);
   final String isbn;
   final String title;
   final String author;
@@ -37,7 +38,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
         future: dbService.getAverageRating(widget.isbn),
         builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return  LoadingScreen(
+            return LoadingScreen(
               fontSize: 30,
             );
           } else {
@@ -47,16 +48,21 @@ class _BookDetailsViewState extends State<BookDetailsView> {
               averageRating = snapshot.data!;
             return Scaffold(
               appBar: AppBar(
-                title: InkWell(child: Text(widget.title),
-                onTap: _scrollToTop,),
+                title: InkWell(
+                  child: Text(widget.title),
+                  onTap: _scrollToTop,
+                ),
                 elevation: 0,
               ),
               body: Center(
                 child: ListView(
                   children: [
-                    Image(image: NetworkImage(widget.imageURL), height: 300,
-                          errorBuilder: (BuildContext context, Object e, StackTrace? stackTrace) {
-                          return noImage;}),
+                    Image(
+                        image: NetworkImage(widget.imageURL),
+                        height: 300,
+                        errorBuilder: (BuildContext context, Object e, StackTrace? stackTrace) {
+                          return noImage;
+                        }),
                     Align(
                         alignment: Alignment.topCenter,
                         child: Column(children: [
@@ -75,7 +81,8 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                             ),
                           ]),
                         ])),
-                    Center(child: Row(children: [
+                    Center(
+                        child: Row(children: [
                       Padding(
                           padding: EdgeInsets.all(10),
                           child: SizedBox(
@@ -125,7 +132,6 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                                       },
                                                     ),
                                                     TextField(
-
                                                       keyboardType: TextInputType.multiline,
                                                       controller: reviewTextController,
                                                       maxLines: 6,
@@ -144,20 +150,19 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                                             ElevatedButton(
                                                 child: Text("Submit"),
                                                 onPressed: () {
-                                                  if(reviewTextController.text.length > 0){
+                                                  if (reviewTextController.text.length > 0) {
                                                     print(getRating());
-                                                    dbService.addReview(widget.isbn, double.parse(getRating()), reviewTextController.text, widget.title);
+                                                    dbService.addReview(
+                                                        widget.isbn, double.parse(getRating()), reviewTextController.text, widget.title);
                                                     Navigator.pop(context);
                                                     setRating("3");
-                                                  }
-                                                  else{
+                                                  } else {
                                                     Fluttertoast.showToast(
                                                         msg: "You need review text to add a review",
                                                         toastLength: Toast.LENGTH_LONG,
                                                         gravity: ToastGravity.BOTTOM,
                                                         fontSize: 16.0);
                                                   }
-
                                                 })
                                           ],
                                         );
@@ -179,15 +184,11 @@ class _BookDetailsViewState extends State<BookDetailsView> {
             );
           }
         });
-
-
   }
 
   void _scrollToTop() {
-    _scrollController.animateTo(0,
-        duration: Duration(milliseconds: 100), curve: Curves.linear);
+    _scrollController.animateTo(0, duration: Duration(milliseconds: 100), curve: Curves.linear);
   }
-
 
   void setRating(String rating) {
     currentRating = rating;
@@ -236,7 +237,7 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                       onPressed: !canLoan(selectedLibrary)
                           ? null
                           : () => {
-                                dbService.loanBook(widget.isbn, selectedLibrary,widget.title,widget.imageURL),
+                                dbService.loanBook(widget.isbn, selectedLibrary, widget.title, widget.imageURL),
                                 selectedLibrary = "Select Library",
                                 setState(() {}),
                               }),

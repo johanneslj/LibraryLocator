@@ -21,8 +21,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null) {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
     }
     return Scaffold(
         appBar: AppBar(
@@ -33,76 +32,62 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             padding: EdgeInsets.only(left: 30, right: 30),
             child: Form(
                 key: _formKey,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                  Row(
                     children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Text("Please enter your email",
-                              style: TextStyle(
-                                fontSize: 24,
-                              )),
-                        ],
+                      Text("Please enter your email",
+                          style: TextStyle(
+                            fontSize: 24,
+                          )),
+                    ],
+                  ),
+                  SizedBox(height: 35),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text("Email"),
+                      TextFormField(
+                        validator: (val) => val!.isEmpty || !val.contains("@") ? "Enter a valid email" : null,
+                        // Username text field
+                        controller: emailController,
+                        decoration: InputDecoration(
+                            focusedBorder: UnderlineInputBorder(),
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            hintText: 'Email'),
                       ),
-                      SizedBox(height: 35),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text("Email"),
-                          TextFormField(
-                            validator: (val) => val!.isEmpty || !val.contains("@")
-                                ? "Enter a valid email"
-                                : null,
-                            // Username text field
-                            controller: emailController,
-                            decoration: InputDecoration(
-                                focusedBorder: UnderlineInputBorder(),
-                                border: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                                hintText: 'Email'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20.0),
-                          child: Container(
-                            child: Column(children: <Widget>[
-                              Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Expanded(child: ElevatedButton(
-                                        style: ElevatedButton.styleFrom(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 20, vertical: 10),
-                                        ),
-                                        onPressed: () async {
-                                          if (_formKey.currentState!.validate()) {
-                                              FirebaseAuth.instance.sendPasswordResetEmail(
-                                                  email: emailController.text);
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => App()
-                                                  )
-                                              );
-                                              Fluttertoast.showToast(
-                                                msg: "If this accout exists, an email with password reset instructions has been sent.",
-                                                toastLength: Toast.LENGTH_LONG,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor: Colors.amber,
-                                                textColor: Colors.white,
-                                                fontSize: 16.0
-                                              );
-                                          }
-                                        },
-                                        child: const Text('Reset Password')))
-                                    ,
-                                  ]),
-                            ]),
-                          ))
-                    ])),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20.0),
+                      child: Container(
+                        child: Column(children: <Widget>[
+                          Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+                            Expanded(
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    ),
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        FirebaseAuth.instance.sendPasswordResetEmail(email: emailController.text);
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => App()));
+                                        Fluttertoast.showToast(
+                                            msg: "If this accout exists, an email with password reset instructions has been sent.",
+                                            toastLength: Toast.LENGTH_LONG,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: Colors.amber,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                      }
+                                    },
+                                    child: const Text('Reset Password'))),
+                          ]),
+                        ]),
+                      ))
+                ])),
           ),
         ));
   }

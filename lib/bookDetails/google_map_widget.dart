@@ -37,7 +37,7 @@ class _MapWidgetState extends State<MapWidget> {
     LatLng positionToMoveTo = calculateMidpoint(currentLatLng, _cameraPosition);
     if (distance < 1) {
       zoom = 15;
-    }else if (distance < 30){
+    } else if (distance < 30) {
       zoom = 11;
     } else if (distance < 270) {
       zoom = 5.5;
@@ -84,9 +84,12 @@ class _MapWidgetState extends State<MapWidget> {
       final Marker marker = new Marker(
         markerId: markerId,
         position: latLng,
-        infoWindow: InfoWindow(title: markerIdVal, snippet: name, onTap: (){
-          launchMap(latLng);
-        }),
+        infoWindow: InfoWindow(
+            title: markerIdVal,
+            snippet: name,
+            onTap: () {
+              launchMap(latLng);
+            }),
       );
 
       setState(() {
@@ -95,6 +98,7 @@ class _MapWidgetState extends State<MapWidget> {
       });
     });
   }
+
   void launchMap(LatLng latLng) {
     MapsLauncher.launchCoordinates(latLng.latitude, latLng.longitude);
   }

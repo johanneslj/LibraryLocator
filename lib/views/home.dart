@@ -58,12 +58,13 @@ class _HomePageState extends State<HomePage> {
   ListView makeListView(List<Widget> bookCards) {
     return ListView(
       children: [
-        for (var card in bookCards) Column(children: [
-          card,
-          if(!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
-                                                                 // then don't add a divider at the bottom.
-            Divider(),
-        ]),
+        for (var card in bookCards)
+          Column(children: [
+            card,
+            if (!(bookCards.indexOf(card) == bookCards.length - 1)) // Check if the card is the last element in the view, if it is
+              // then don't add a divider at the bottom.
+              Divider(),
+          ]),
       ],
     );
   }

@@ -39,15 +39,13 @@ class _AppState extends State<App> {
   List<Widget>? cache;
 
   Widget _getViewContainer(int index) {
-
     final _currentUser = FirebaseAuth.instance.currentUser;
 
     List<Widget> notLoggedIn = [HomePage(updateCache: updateCache, cache: this.cache), SearchView(cache: this.cache), LoginPage()];
     List<Widget> userWidgetsList = [HomePage(updateCache: updateCache, cache: this.cache), SearchView(cache: this.cache), ProfilePage()];
 
-
     if (_currentUser != null) {
-        return userWidgetsList[index];
+      return userWidgetsList[index];
     } else {
       return notLoggedIn[index];
     }
@@ -65,27 +63,25 @@ class _AppState extends State<App> {
           if (snapshot.hasError) {
             print(snapshot.error);
           }
-  // After initialization, app is shown
+          // After initialization, app is shown
           if (snapshot.connectionState == ConnectionState.done) {
             return MaterialApp(
               title: 'Library Locator',
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
-                brightness: Brightness.dark,
-                primarySwatch: Colors.amber,
-                primaryTextTheme: Typography.whiteCupertino,
-                textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                        primary: Colors.white)
-                )
-              ),
+                  brightness: Brightness.dark,
+                  primarySwatch: Colors.amber,
+                  primaryTextTheme: Typography.whiteCupertino,
+                  textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: Colors.white))),
               home: Scaffold(
-                body: Consumer(builder: (context, watch, child) {
-                  final _indexState = watch(bottomNavigationBarIndexProvider);
-                  return SafeArea(
-                    child: _getViewContainer(_indexState),
-                  );
-                },),
+                body: Consumer(
+                  builder: (context, watch, child) {
+                    final _indexState = watch(bottomNavigationBarIndexProvider);
+                    return SafeArea(
+                      child: _getViewContainer(_indexState),
+                    );
+                  },
+                ),
                 bottomNavigationBar: BottomNavigationBarWidget(),
               ),
             );
@@ -96,5 +92,3 @@ class _AppState extends State<App> {
         });
   }
 }
-
-

@@ -23,16 +23,10 @@ class DatabaseService {
         data = new Map<dynamic, dynamic>.from(snapshot.value);
         data.forEach((key, value) {
           // Here key is the reviewers Name/ID and the value consists of the star rating and text in the review
-          List<String> listOfReviewContent = value.toString().replaceAll(
-              "}", "").split(",");
-          String reviewText = listOfReviewContent.elementAt(1)
-              .split("text: ")
-              .elementAt(1);
-          double reviewStars = double.parse(
-              listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
-          reviewList.add(new ReviewCard(stars: reviewStars,
-              reviewText: reviewText,
-              username: key.split("@")[0]));
+          List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+          String reviewText = listOfReviewContent.elementAt(1).split("text: ").elementAt(1);
+          double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+          reviewList.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: key.split("@")[0]));
         });
       }
     });
@@ -54,9 +48,7 @@ class DatabaseService {
 
       value.forEach((key, value) async {
         if (key == "image") {
-          if (value
-              .toString()
-              .isEmpty) {
+          if (value.toString().isEmpty) {
             imageURL = defaultImage;
           } else {
             imageURL = value.toString();
@@ -73,13 +65,7 @@ class DatabaseService {
         }
       });
 
-      bookList.add(new BookCard(
-          stars: averageRating,
-          imageURL: imageURL,
-          author: author,
-          title: title,
-          isbn: key,
-          summary: summary));
+      bookList.add(new BookCard(stars: averageRating, imageURL: imageURL, author: author, title: title, isbn: key, summary: summary));
     });
 
     return bookList;
@@ -100,12 +86,9 @@ class DatabaseService {
 
       value.forEach((key, value) async {
         if (key == "image") {
-          if (value
-              .toString()
-              .isEmpty) {
+          if (value.toString().isEmpty) {
             imageURL = defaultImage;
-          }
-          else {
+          } else {
             imageURL = value.toString();
           }
         }
@@ -120,13 +103,7 @@ class DatabaseService {
         }
       });
 
-      bookList.add(new BookCard(
-          stars: averageRating,
-          imageURL: imageURL,
-          author: author,
-          title: title,
-          isbn: key,
-          summary: summary));
+      bookList.add(new BookCard(stars: averageRating, imageURL: imageURL, author: author, title: title, isbn: key, summary: summary));
     });
 
     return bookList;
@@ -161,10 +138,8 @@ class DatabaseService {
         double totalRating = 0;
 
         data.forEach((key, value) {
-          List<String> listOfReviewContent = value.toString().replaceAll(
-              "}", "").split(",");
-          double reviewStars = double.parse(
-              listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
+          List<String> listOfReviewContent = value.toString().replaceAll("}", "").split(",");
+          double reviewStars = double.parse(listOfReviewContent.elementAt(0).split("stars: ").elementAt(1));
           totalRating += reviewStars;
         });
 
@@ -184,10 +159,7 @@ class DatabaseService {
   Future<List<Widget>> getLoans(String email) async {
     List<LoanCard> loanList = <LoanCard>[];
 
-
-    final loans = firebaseDatabase.child(
-        "users/" + email.replaceAll(".", " ") + "/loans");
-
+    final loans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans");
 
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     Map<dynamic, dynamic> innerData;
@@ -195,7 +167,6 @@ class DatabaseService {
     await loans.get().then((DataSnapshot snapshot) {
       data = new Map<dynamic, dynamic>.from(snapshot.value);
       data.forEach((key, value) {
-
         innerData = new Map<dynamic, dynamic>.from(value);
         loanList.add(new LoanCard(
           imageURL: innerData["imageURL"],
@@ -210,30 +181,21 @@ class DatabaseService {
       });
     });
 
-    loanList.sort((LoanCard a, LoanCard b) =>
-    -a.from
-        .difference(b.from)
-        .inHours);
+    loanList.sort((LoanCard a, LoanCard b) => -a.from.difference(b.from).inHours);
 
     return loanList;
   }
 
   void deliverBook(String email, String isbn, String location) async {
-    final userLoans = firebaseDatabase.child(
-        "users/" + email.replaceAll(".", " ") + "/loans/" + isbn);
+    final userLoans = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/loans/" + isbn);
     DateTime now = DateTime.now();
     DateTime deliveredDate = new DateTime(now.year, now.month, now.day);
-    String deliveredDateString = "" + deliveredDate.year.toString() + "-" +
-        deliveredDate.month.toString() + "-" + deliveredDate.day.toString();
+    String deliveredDateString = "" + deliveredDate.year.toString() + "-" + deliveredDate.month.toString() + "-" + deliveredDate.day.toString();
     userLoans.update({"delivered": true, "to": deliveredDateString});
 
-    final availability = firebaseDatabase.child(
-        "books/" + isbn + "/availability/" + location);
+    final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + location);
     int available = 0;
-    await availability.get().then((DataSnapshot dataSnapshot) =>
-    {
-      available = dataSnapshot.value
-    });
+    await availability.get().then((DataSnapshot dataSnapshot) => {available = dataSnapshot.value});
     availability.set(available + 1);
   }
 
@@ -251,8 +213,7 @@ class DatabaseService {
   Future<List<Widget>> getReviewsByUser(String email) async {
     List<Widget> reviewCards = <Widget>[];
 
-    final reviews = firebaseDatabase.child(
-        "users/" + email.replaceAll(".", " ") + "/reviews");
+    final reviews = firebaseDatabase.child("users/" + email.replaceAll(".", " ") + "/reviews");
 
     Map<dynamic, dynamic> data = <dynamic, dynamic>{};
     Map<dynamic, dynamic> reviewContent;
@@ -264,12 +225,9 @@ class DatabaseService {
 
         String reviewText = reviewContent["text"].toString();
         double reviewStars = double.parse(reviewContent["stars"].toString());
-        String title = (reviewContent["title"] != null)
-            ? reviewContent["title"]
-            : "N/A";
+        String title = (reviewContent["title"] != null) ? reviewContent["title"] : "N/A";
 
-        reviewCards.add(new ReviewCard(
-            stars: reviewStars, reviewText: reviewText, username: title));
+        reviewCards.add(new ReviewCard(stars: reviewStars, reviewText: reviewText, username: title));
       });
     });
 
@@ -278,47 +236,32 @@ class DatabaseService {
 
   /// Adds a review from a user to the database
   void addReview(String isbn, double rating, String reviewText, String title) {
-    String name = FirebaseAuth.instance.currentUser!.email.toString()
-        .replaceAll(".", " ");
+    String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
 
-    final reviews = firebaseDatabase.child(
-        "books/" + isbn + "/reviews/" + name);
-    final reviewsUser = firebaseDatabase.child(
-        "users/" + name + "/reviews/" + isbn);
-    reviews.update({"stars": rating, "text": reviewText, "title": title})
-        .catchError((error) => print("OOps"));
-    reviewsUser.update({"stars": rating, "text": reviewText, "title": title})
-        .catchError((error) => print("OOps"));
+    final reviews = firebaseDatabase.child("books/" + isbn + "/reviews/" + name);
+    final reviewsUser = firebaseDatabase.child("users/" + name + "/reviews/" + isbn);
+    reviews.update({"stars": rating, "text": reviewText, "title": title}).catchError((error) => print("OOps"));
+    reviewsUser.update({"stars": rating, "text": reviewText, "title": title}).catchError((error) => print("OOps"));
   }
 
   /// Loans a book to a user if the book is available
   /// this is registered in the database
-  void loanBook(String isbn, String selected,String title,String imageURL) {
-    String name = FirebaseAuth.instance.currentUser!.email.toString()
-        .replaceAll(".", " ");
+  void loanBook(String isbn, String selected, String title, String imageURL) {
+    String name = FirebaseAuth.instance.currentUser!.email.toString().replaceAll(".", " ");
 
     String selectedLibrary = selected.split(" ")[0];
     int currentlyAvailable = int.parse(selected.split("Available: ")[1]) - 1;
-    final availability = firebaseDatabase.child(
-        "books/" + isbn + "/availability/" + selectedLibrary);
+    final availability = firebaseDatabase.child("books/" + isbn + "/availability/" + selectedLibrary);
     availability.set(currentlyAvailable);
 
     final userLoan = firebaseDatabase.child("users/" + name + "/loans/" + isbn);
     DateTime now = new DateTime.now();
     DateTime from = new DateTime(now.year, now.month, now.day);
     DateTime to = new DateTime(now.year, now.month, now.day + 30);
-    String fromString = "" + from.year.toString() + "-" +
-        from.month.toString() + "-" + from.day.toString();
-    String toString = "" + to.year.toString() + "-" + to.month.toString() +
-        "-" + to.day.toString();
-    userLoan.set({
-      "from": fromString,
-      "to": toString,
-      "delivered": false,
-      "location": selectedLibrary,
-      "title": title,
-      "imageURL": imageURL
-    }).catchError((error) => print(error));
+    String fromString = "" + from.year.toString() + "-" + from.month.toString() + "-" + from.day.toString();
+    String toString = "" + to.year.toString() + "-" + to.month.toString() + "-" + to.day.toString();
+    userLoan
+        .set({"from": fromString, "to": toString, "delivered": false, "location": selectedLibrary, "title": title, "imageURL": imageURL}).catchError(
+            (error) => print(error));
   }
-
 }

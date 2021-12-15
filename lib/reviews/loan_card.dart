@@ -44,10 +44,12 @@ class _LoanCardState extends State<LoanCard> {
         Expanded(
           child: Container(
             foregroundDecoration: !isDelivered(widget.to)
-                ? !overdue ? null : BoxDecoration(
-                    color:Colors.red,
-                    backgroundBlendMode: BlendMode.overlay,
-                  )
+                ? !overdue
+                    ? null
+                    : BoxDecoration(
+                        color: Colors.red,
+                        backgroundBlendMode: BlendMode.overlay,
+                      )
                 : BoxDecoration(
                     color: Colors.transparent,
                     backgroundBlendMode: BlendMode.saturation,
@@ -68,7 +70,12 @@ class _LoanCardState extends State<LoanCard> {
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: Column(
                       children: [
-                        Text(isDelivered(widget.to) ? widget.title : !overdue ? widget.title :  "(OVERDUE) " + widget.title ,
+                        Text(
+                            isDelivered(widget.to)
+                                ? widget.title
+                                : !overdue
+                                    ? widget.title
+                                    : "(OVERDUE) " + widget.title,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.left,
                             style: TextStyle(
@@ -96,9 +103,13 @@ class _LoanCardState extends State<LoanCard> {
                     child: isDelivered(widget.to)
                         ? null
                         : ElevatedButton(
-                            style: !overdue ? ElevatedButton.styleFrom(
-                              primary: Colors.amber,) : ElevatedButton.styleFrom(
-                                primary: Colors.red,),
+                            style: !overdue
+                                ? ElevatedButton.styleFrom(
+                                    primary: Colors.amber,
+                                  )
+                                : ElevatedButton.styleFrom(
+                                    primary: Colors.red,
+                                  ),
                             child: Text("Deliver"),
                             onPressed: () => {
                               dbService.deliverBook(widget.email, widget.isbn, widget.location),
