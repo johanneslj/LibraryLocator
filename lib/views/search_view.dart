@@ -90,6 +90,11 @@ class _SearchViewState extends State<SearchView> {
       ),
       style: TextStyle(color: Colors.white, fontSize: 16.0),
       onChanged: (query) => updateSearchQuery(query),
+      onSubmitted: (query) => {
+      updateSearchQuery(_searchQueryController.text),
+        searched = true,
+        FocusScope.of(context).unfocus()
+      },
     );
   }
 
