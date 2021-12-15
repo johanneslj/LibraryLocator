@@ -16,7 +16,6 @@ class MapWidget extends StatefulWidget {
 class _MapWidgetState extends State<MapWidget> {
   LatLng _cameraPosition = LatLng(62.4721, 6.2355);
   Location _location = Location();
-  late GoogleMapController _controller;
   Map<String, LatLng> libraries = {
     "Trondheim": LatLng(63.417459290344574, 10.404071511864087),
     "Ålesund": LatLng(62.4721, 6.2355),

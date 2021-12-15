@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:library_locator/main.dart';
-import '../views/home.dart';
 import 'login_view.dart';
 
 class RegisterPage extends StatefulWidget {

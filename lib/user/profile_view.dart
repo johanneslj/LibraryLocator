@@ -13,7 +13,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   ScrollController controller = ScrollController();
-  ScrollController _loanScrollCtrl = ScrollController();
   ScrollController _reviewScrollCtrl = ScrollController();
 
   /// Creates the button for the toolbar which is either a sign in or sign out

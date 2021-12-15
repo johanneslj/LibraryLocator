@@ -2,10 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:library_locator/reviews/loan_card.dart';
-import 'package:library_locator/user/loan_model.dart';
 import 'package:library_locator/reviews/review_card.dart';
 import '../reviews/book_card.dart';
-import '../user/loan_model.dart';
 import 'package:dio/dio.dart';
 
 class DatabaseService {
