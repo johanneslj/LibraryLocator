@@ -238,6 +238,11 @@ class _BookDetailsViewState extends State<BookDetailsView> {
                           ? null
                           : () => {
                                 dbService.loanBook(widget.isbn, selectedLibrary, widget.title, widget.imageURL),
+                                Fluttertoast.showToast(
+                                    msg: "You loaned " + widget.title,
+                                    toastLength: Toast.LENGTH_LONG,
+                                    gravity: ToastGravity.BOTTOM,
+                                    fontSize: 16.0),
                                 selectedLibrary = "Select Library",
                                 setState(() {}),
                               }),
